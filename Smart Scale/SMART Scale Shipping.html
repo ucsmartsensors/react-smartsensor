@@ -28,6 +28,55 @@
 
 		<body>
 
-
+			<div class="container">
+			<form class="packagedetails">
+				<fieldset>
+				    <legend><b>Package Details:</b></legend>
+				    Select Order:<br>
+						<select name="orders">
+  						<option value="1">Placeholder</option>
+  						<option value="2">1</option>
+  						<option value="3">2</option>
+  						<option value="4">3</option>
+						</select>
+				    <br><br>
+						<legend><i>Dimensions in Inches</i></legend>
+						<br>
+				    Height:<br>
+				    <input type="text" name="height" style="width:10%; height:25px">
+						<br>
+						Width:<br>
+					 	<input type="text" name="width" style="width:10%; height:25px">
+					 	<br>
+					 	Length:<br>
+				    <input type="text" name="length" style="width:10%; height:25px">
+						<br>
+				  </fieldset>
+					<fieldset>
+					    <legend><b>Shipping To:</b></legend>
+							<br>
+							Company:<br>
+					    <input type="text" name="company">
+							<br>
+							Address Line 1:<br>
+						 	<input type="text" name="addressline1">
+						 	<br>
+						 	Address Line 2:<br>
+					    <input type="text" name="addressline2">
+							<br>
+							Zip:<br>
+							<input type="text" name="zip">
+							<br>
+							Country:<br>
+							<input list="countries">
+									<datalist id="countries">
+  								<option value="United States">
+  								<option value="Place Holder">
+									</datalist>
+							<br><br>
+		  				<button type="submit">Print Label</button>
+			</fieldset>
+			</form>
+			</div>
 		</body>
 </html>
