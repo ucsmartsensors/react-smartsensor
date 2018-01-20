@@ -2,6 +2,9 @@ import Login from "./containers/Login";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Home from "./containers/Home";
+import Status from "./containers/Status";
+import Count from "./containers/Count";
+import Shipping from "./containers/Shipping";
 import NotFound from "./containers/NotFound";
 import Signup from "./containers/Signup";
 import AppliedRoute from "./components/AppliedRoute";
@@ -15,7 +18,10 @@ export default ({ childProps }) =>
   <UnauthenticatedRoute path="/signup" exact component={Signup} props={childProps} />
 { /* <AuthenticatedRoute path="/notes/new" exact component={NewNote} props={childProps} /> */}
 
+  <AuthenticatedRoute path="/Count" exact component={Count} props={childProps} />
+  <AuthenticatedRoute path="/Status" exact component={Status} props={childProps} />
+  <AuthenticatedRoute path="/Shipping" exact component={Shipping} props={childProps} />
+
   { /* Finally, catch all unmatched routes */ }
   <Route component={NotFound} />
 </Switch>;
-
