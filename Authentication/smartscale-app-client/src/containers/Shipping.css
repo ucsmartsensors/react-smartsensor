@@ -22,3 +22,8 @@
   .Shipping p {
     color: #999;
   }
+
+input[type=text] {
+  margin: 5px 8px;
+  box-sizing: border-box;
+}
