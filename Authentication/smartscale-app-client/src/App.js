@@ -45,6 +45,10 @@ class App extends Component {
       userHasAuthenticated: this.userHasAuthenticated
     };
   
+
+documentClient.scan(params, function(err, data) {
+    console.log(data);
+});
     return (
       !this.state.isAuthenticating &&
       <div className="App container">
