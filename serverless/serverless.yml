@@ -26,7 +26,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+      Resource: "*"
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
@@ -42,7 +42,7 @@ functions:
           path: notes
           method: post
           cors: true
-          authorizer: aws_iam
+          
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /notes/{id}
@@ -53,4 +53,4 @@ functions:
           path: count/{id}
           method: get
           cors: true
-          authorizer: aws_iam
+          
