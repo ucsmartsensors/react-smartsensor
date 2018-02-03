@@ -1,15 +1,35 @@
 import React, { Component } from "react";
-import "./Home.css";
+import { invokeApig } from "../libs/awsLib";
 
-export default class Home extends Component {
+export default class Notes extends Component {
+  constructor(props) {
+    super(props);
+
+    this.file = null;
+
+    this.state = {
+      note: null,
+      content: ""
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      const results = await this.getNote();
+      this.setState({
+        note: results,
+        content: results.content
+      });
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  getNote() {
+    return invokeApig({ path: `/count/${this.props.match.params.id}` });
+  }
+
   render() {
-    return (
-      <div className="Home">
-        <div className="lander">
-          <h1>Smartscale</h1>
-          <p>A Smart Order Fullfillment App</p>
-        </div>
-      </div>
-    );
+    return <div className="Counts" />;
   }
 }
