@@ -42,7 +42,6 @@ var parcel = {
 		"address_from": addressFrom,
 		"address_to": addressTo,
 		"parcels": [parcel],
-		"customs_declaration": customsDeclaration.object_id,
 		"async": false
 	})
 
