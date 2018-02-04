@@ -1,0 +1,23 @@
+{
+	"ProjectName": "smartscale-app-client",
+	"ProjectPath": "C:\\Users\\13hao\\Documents\\GitHub\\react-smartsensor\\Authentication\\smartscale-app-client",
+	"SourceDir": "src",
+	"DistributionDir": "build",
+	"BuildCommand": "npm.cmd run-script build",
+	"StartCommand": "npm.cmd run-script start",
+	"InitializationTime": "2018-02-03-05-41-28",
+	"LastConfigurationTime": "2018-02-03-05-41-42",
+	"LastNPMInstallTime": "",
+	"FrontendLastBuildTime": "",
+	"LastPublishTime": "",
+	"BackendFormat": "yml",
+	"BackendLastSyncTime": "",
+	"BackendLastBuildTime": "",
+	"BackendLastPushTime": "",
+	"BackendLastPushSuccessful": false,
+	"BackendProjectID": "",
+	"BackendProjectName": "",
+	"BackendProjectConsoleUrl": "",
+	"BackendProjectCreationTime": "",
+	"BackendProjectLastUpdatedTime": ""
+}

@@ -1,35 +1,46 @@
 import React, { Component } from "react";
-import { invokeApig } from "../libs/awsLib";
+import { PageHeader, ListGroup } from "react-bootstrap";
+import "./Home.css";
 
-export default class Notes extends Component {
+export default class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.file = null;
-
     this.state = {
-      note: null,
-      content: ""
+      isLoading: true,
+      shipment: []
     };
   }
 
-  async componentDidMount() {
-    try {
-      const results = await this.getNote();
-      this.setState({
-        note: results,
-        content: results.content
-      });
-    } catch (e) {
-      alert(e);
-    }
+  renderShipments(shipment) {
+    return null;
   }
 
-  getNote() {
-    return invokeApig({ path: `/count/${this.props.match.params.id}` });
+  renderLander() {
+    return (
+      <div className="lander">
+        <h1>smart scale</h1>
+        <p>order fullfillment </p>
+      </div>
+    );
+  }
+
+  renderNotes() {
+    return (
+      <div className="shipment">
+        <PageHeader>Your shipment</PageHeader>
+        <ListGroup>
+          {!this.state.isLoading && this.renderShipments(this.state.notes)}
+        </ListGroup>
+      </div>
+    );
   }
 
   render() {
-    return <div className="Counts" />;
+    return (
+      <div className="Home">
+        {this.props.isAuthenticated ? this.renderShipments() : this.renderLander()}
+      </div>
+    );
   }
 }
