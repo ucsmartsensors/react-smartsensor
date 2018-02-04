@@ -1,14 +1,50 @@
 import React, { Component } from "react";
 import "./Shipping.css";
-import ShippingSubmit from './components/ShippingSubmit';
-import "./components/ShippoPostShipment";
+import { Form } from "react-bootstrap";
+import axios from 'axios';
+import AWS from "aws-sdk";
+AWS.config.update({ region: "us-east-2" });
+const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 export default class Shipping extends Component {
+  constructor(props) {
+      super(props);
+        this.state = {
+          height: "",
+          width: "",
+          length: "",
+          weight: "",
+          name: "",
+          street1: "",
+          city: "",
+          state: "",
+          zip: "",
+          country: "",
+          distance_unit: "",
+          mass_unit: ""
+          };
+
+          this.handleChange = this.handleChange.bind(this);
+          this.handleSubmit = this.handleSubmit.bind(this);
+        }
+
+        handleChange(event) {
+        this.setState({ [event.target.name]: event.target.value });
+      }
+
+      handleSubmit = (e) => {
+        e.preventDefault();
+        const { name, street1, city, state, zip, country, length, width, height, distance_unit, weight, mass_unit } = this.state;
+
+         //axios.post('/', { name, street1, city, state, zip, country, length, width, height, distance_unit, weight, mass_unit })
+        //.then((result) => {
+      }
+
   render() {
     return (
       <div className="Shipping">
         <div className="card">
-          <form name="shippingform" onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit}>
             <fieldset>
               Select Order:<br></br>
               <select id="orders">
@@ -17,35 +53,89 @@ export default class Shipping extends Component {
               <br></br><br></br>
               <legend>Dimensions in Inches</legend>
               Height:
-              <input type="text" input id="height" />
+              <input
+                name="height"
+                type="text"
+                onChange={this.handleChange}
+                value={this.state.height}
+                placeholder="Enter text" />
               Width:
-              <input type="text" input id="width" />
+              <input
+                name="width"
+                type="text"
+                placeholder="Enter text"
+                value={this.state.width}
+                onChange={this.handleChange} />
               Length:
-              <input type="text" input id="length" />
+              <input
+                name="length"
+                type="text"
+                placeholder="Enter text"
+                value={this.state.length}
+                onChange={this.handleChange} />
               Weight:
-              <input type="text" input id="weight" />
+              <input
+                name="weight"
+                type="text"
+                placeholder="Enter text"
+                value={this.state.weight}
+                onChange={this.handleChange} />
               Distance Unit:
-              <input type="text" input id="distance_unit" value="in" />
+              <input
+                name="distance_unit"
+                type="text"
+                value="in" />
               Mass Unit:
-              <input type="text" input id="mass_unit" value="lb" />
+              <input
+                name="mass_unit"
+                type="text"
+                value="lb" />
             </fieldset>
             <br></br>
             <fieldset>
                 <legend>Shipping To:</legend>
                 Name:
-                <input type="text" input id="name" />
+                <input
+                  name="name"
+                  type="text"
+                  placeholder="Enter text"
+                  value={this.state.name}
+                  onChange={this.handleChange} />
                 Address Line 1:
-                <input type="text" input id="street1" />
+                <input
+                  name="street1"
+                  type="text"
+                  placeholder="Enter text"
+                  value={this.state.street1}
+                  onChange={this.handleChange} />
                 City:
-                <input type="text" input id="city" />
+                <input
+                  name="city"
+                  type="text"
+                  placeholder="Enter text"
+                  value={this.state.city}
+                  onChange={this.handleChange} />
                 State:
-                <input type="text" input id="state" />
+                <input
+                  name="state"
+                  type="text"
+                  placeholder="Enter text"
+                  value={this.state.state}
+                  onChange={this.handleChange} />
                 <br></br>
                 Zip:
-                <input type="text" input id="zip" />
+                <input
+                  name="zip"
+                  type="text"
+                  placeholder="Enter text"
+                  value={this.state.zip}
+                  onChange={this.handleChange} />
                 Country:
-                <input type="text" input id="country" value="US" />
-                <button type="submit">Print Label</button>
+                <input
+                  name="country"
+                  type="text"
+                  value="US" />
+                <button type="submit">Get Rates</button>
         </fieldset>
         </form>
         </div>
