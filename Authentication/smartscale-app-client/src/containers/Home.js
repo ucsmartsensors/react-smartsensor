@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { PageHeader, ListGroup } from "react-bootstrap";
 import "./Home.css";
+import { invokeApig } from '../libs/awsLib';
 
 export default class Home extends Component {
   constructor(props) {
@@ -10,6 +11,26 @@ export default class Home extends Component {
       isLoading: true,
       shipment: []
     };
+    
+  }
+
+  async componentDidMount() {
+    if (!this.props.isAuthenticated) {
+      return;
+    }
+  
+    try {
+      const results = await this.shipment();
+      this.setState({ shipment: results });
+    } catch (e) {
+      alert(e);
+    }
+  
+    this.setState({ isLoading: false });
+  }
+  
+  notes() {
+    return invokeApig({ path: "/shipment" });
   }
 
   renderShipments(shipment) {
@@ -30,7 +51,7 @@ export default class Home extends Component {
       <div className="shipment">
         <PageHeader>Your shipment</PageHeader>
         <ListGroup>
-          {!this.state.isLoading && this.renderShipments(this.state.notes)}
+          {!this.state.isLoading && this.renderShipments(this.state.shipment)}
         </ListGroup>
       </div>
     );
