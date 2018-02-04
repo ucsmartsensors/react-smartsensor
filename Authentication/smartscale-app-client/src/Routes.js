@@ -5,6 +5,7 @@ import Home from "./containers/Home";
 import Status from "./containers/Status";
 import Count from "./containers/Count";
 import Shipping from "./containers/Shipping";
+import Shipments from "./containers/Shipments";
 import NotFound from "./containers/NotFound";
 import Signup from "./containers/Signup";
 import AppliedRoute from "./components/AppliedRoute";
@@ -20,6 +21,7 @@ export default ({ childProps }) =>
 
   <AuthenticatedRoute path="/Count" exact component={Count} props={childProps} />
   <AuthenticatedRoute path="/Status" exact component={Status} props={childProps} />
+  <AuthenticatedRoute path="/Shipments" exact component={Shipments} props={childProps} />
   <AuthenticatedRoute path="/Shipping" exact component={Shipping} props={childProps} />
 
   { /* Finally, catch all unmatched routes */ }

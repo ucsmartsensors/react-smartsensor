@@ -51,7 +51,6 @@ class App extends Component {
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              {/*<Link to="/">Smartscale</Link>*/}
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -82,6 +81,10 @@ class App extends Component {
       					<MenuItem divider />
       					<RouteNavItem key={1.3} href="/Shipping">
                 Shipping
+                </RouteNavItem>
+                <MenuItem divider />
+      					<RouteNavItem key={1.4} href="/Shipments">
+                Shipments
                 </RouteNavItem>
                 </NavItem>
                 : [
