@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { PageHeader, ListGroup } from "react-bootstrap";
+import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
 import "./Home.css";
 import { invokeApig } from '../libs/awsLib';
+import Amplify, { API } from 'aws-amplify';
+import aws_exports from '../aws_exports';
+Amplify.configure(aws_exports);
 
 export default class Home extends Component {
   constructor(props) {
@@ -9,33 +12,67 @@ export default class Home extends Component {
 
     this.state = {
       isLoading: true,
-      shipment: []
+      shipments: [],
+      orderId: ''
     };
     
   }
+   
 
   async componentDidMount() {
     if (!this.props.isAuthenticated) {
       return;
     }
-  
+
     try {
-      const results = await this.shipment();
-      this.setState({ shipment: results });
+      const results = await this.shipments();
+      
+      this.setState({ shipments: results });
     } catch (e) {
+      
       alert(e);
     }
   
     this.setState({ isLoading: false });
   }
-  
-  notes() {
-    return invokeApig({ path: "/shipment" });
-  }
 
-  renderShipments(shipment) {
-    return null;
+ /*
+  async shipments() { 
+    let apiName = 'getOrder';
+    let path = '/count/1';
+    let myInit = { // OPTIONAL
+        headers: {} // OPTIONAL
+    }
+    return await API.get(apiName, path, myInit);
+}
+*/
+  
+  shipments() {
+    return invokeApig({ path: `/count/1` });
   }
+  
+
+renderShipments(shipments) {
+  console.log(shipments.orderId)
+  return [{}].concat(shipments).map(
+    (shipment) =>
+
+    <ListGroupItem
+            key={shipment}
+            href={`/orders/${shipment}`}
+            onClick={this.handleNoteClick}
+            
+          >
+          </ListGroupItem>
+        
+
+  );
+}
+
+handleNoteClick = event => {
+  event.preventDefault();
+  this.props.history.push(event.currentTarget.getAttribute("href"));
+}
 
   renderLander() {
     return (
@@ -46,12 +83,13 @@ export default class Home extends Component {
     );
   }
 
-  renderNotes() {
+  rendershipments() {
     return (
       <div className="shipment">
         <PageHeader>Your shipment</PageHeader>
+        
         <ListGroup>
-          {!this.state.isLoading && this.renderShipments(this.state.shipment)}
+          {!this.state.isLoading && this.renderShipments(this.state.shipments)}
         </ListGroup>
       </div>
     );

@@ -2,7 +2,6 @@
 import Amplify, { API } from 'aws-amplify';
 
 
-
 export default Amplify.configure({
     Auth: {
         identityPoolId: "us-east-2:90821dc6-0559-4bad-99af-668efffabb47", //REQUIRED - Amazon Cognito Identity Pool ID

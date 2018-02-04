@@ -1,18 +1,30 @@
 import React, { Component } from "react";
 import { invokeApig } from "../libs/awsLib";
+import { FormGroup, FormControl} from "react-bootstrap";
+import LoaderButton from "../components/LoaderButton";
+
 
 export default class Shipments extends Component {
   constructor(props) {
     super(props);
 
     // this.file = null;
-    this.state = {
+    this.state = { 
+        shippment: { 
         isLoading: null,
         isDeleting: null,
-        shipment: null,
-        content: ""
-      };
-  }
+        shipmentId: null,
+        content: "",
+        name: "",
+        street1 : "",
+        city: "",
+        state: "",
+        zip: "",
+        country: ""
+      }
+    };
+    this.handleChange = this.handleChange.bind(this);
+    }
 
   async componentDidMount() {
     try {
@@ -26,8 +38,9 @@ export default class Shipments extends Component {
     }
   }
 
+
   getShipment() {
-    return invokeApig({ path: `/shipments/${this.props.match.params.id}` });
+    return invokeApig({ path: `/count/${this.props.match.params.id}` });
   }
 
   validateForm() {
@@ -46,22 +59,23 @@ export default class Shipments extends Component {
       [event.target.id]: event.target.value
     });
   }
-  
+ 
+ /* 
   handleFileChange = event => {
     this.file = event.target.files[0];
   }
+ */ 
   
-  
-  saveNote(note) {
+  saveShipment(shipment) {
     return invokeApig({
-      path: `/notes/${this.props.match.params.id}`,
+      path: `/count/${this.props.match.params.id}`,
       method: "PUT",
-      body: note
+      body: shipment 
     });
   }
   
   handleSubmit = async event => {
-    let uploadedFilename;
+  
   
     event.preventDefault();
   
@@ -73,14 +87,12 @@ export default class Shipments extends Component {
     this.setState({ isLoading: true });
   
     try {
-      if (this.file) {
-        uploadedFilename = (await s3Upload(this.file))
-          .Location;
-      }
-  
+      
       await this.saveShipment({
         ...this.state.shipment,
-        content: this.state.content,
+        
+        width: this.state.width,
+
 //      attachment: uploadedFilename || this.state.note.attachment
       });
       this.props.history.push("/");

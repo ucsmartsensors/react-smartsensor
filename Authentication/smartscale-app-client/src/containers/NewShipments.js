@@ -1,5 +1,6 @@
+/*
 import React, { Component } from "react";
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl} from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import config from "../config";
 import "./NewShipment.css";
@@ -46,7 +47,7 @@ export default class NewShipment extends Component {
     return (
       <div className="NewShipment">
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="content">
+          <FormGroup>
             <FormControl
               onChange={this.handleChange}
               value={this.state.content}
@@ -69,3 +70,4 @@ export default class NewShipment extends Component {
     );
   }
 }
+*/

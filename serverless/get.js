@@ -6,14 +6,14 @@ AWS.config.update({ region: "us-east-2" });
 
 export async function main(event, context, callback) {
   const params = {
-    TableName: "Iotdata_03",
+    TableName: "Orders",
     // 'KeyConditionExpression' defines the condition for the query
     // - 'userId = :userId': only return items with matching 'userId'
     //   partition key
     // 'ExpressionAttributeValues' defines the value in the condition
     // - ':userId': defines 'userId' to be Identity Pool identity id
     //   of the authenticated user
-    KeyConditionExpression: "orderId = :deviceID",
+    KeyConditionExpression: "orderId = :orderId",
     ExpressionAttributeValues: {
       ":orderId":  event.pathParameters.id
     }
