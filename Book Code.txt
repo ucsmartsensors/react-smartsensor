@@ -1,0 +1,45 @@
+import React, { Component } from "react";
+
+import AWS from "aws-sdk";
+AWS.config.update({ region: "us-east-2" });
+const dynamoDb = new AWS.DynamoDB.DocumentClient();
+const rp = require('minimal-request-promise')
+
+module.exports = function ShippoShipment(request) {
+  if (!request || !request.pizza || !request.address)
+    throw new Error('To order pizza please provide pizza type and address where pizza should be delivered')
+
+  return rp.post('https://qvbj59j36g.execute-api.us-east-2.amazonaws.com/prod/shipping', {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      pickupTime: '15.34pm',
+      pickupAddress: 'Aunt Maria Pizzeria',
+      deliveryAddress: request.address,
+      webhookUrl:
+          'https://qvbj59j36g.execute-api.us-east-2.amazonaws.com/prod/shipping',
+    })
+  })
+    .then(rawResponse => JSON.parse(rawResponse.body))
+    .then(response => {
+      return docClient.put({
+        TableName: 'pizza-orders',
+        Item: {
+          orderId: response.deliveryId,
+          pizza: request.pizza,
+          address: request.address,
+          orderStatus: 'pending'
+        }
+      }).promise()
+    })
+    .then(res => {
+      console.log('Order is saved!', res)
+      return res
+    })
+    .catch(saveError => {
+      console.log(`Oops, order is not saved :(`, saveError)
+      throw saveError
+    })
+}

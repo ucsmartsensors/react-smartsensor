@@ -1,0 +1,18 @@
+
+var shippo = require('shippo')('shippo_test_b19b2d39541b35ca70355a176e82c084069431dd');
+
+// Get all rates for the shipment.
+if ( ( shipment.status == "QUEUED" || shipment.status == "WAITING" ) && attempts < 10 ){
+    shippo.shipment.retrieve( shipment.object_id ).then(function( val ){
+        ratesReady( val, attempts+1 );
+    });
+}
+
+// Purchase the desired rate.
+shippo.transaction.create({
+    "rate": rate.object_id,
+    "label_file_type": "PDF",
+    "async": false
+}, function(err, transaction) {
+   // asynchronous callback
+});
