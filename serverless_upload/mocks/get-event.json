@@ -1,0 +1,10 @@
+{
+    "pathParameters": {
+      "shippingId": "1001"
+    },
+    "requestContext": {
+      "identity": {
+        "cognitoIdentityId": ""
+      }
+    }
+  }
