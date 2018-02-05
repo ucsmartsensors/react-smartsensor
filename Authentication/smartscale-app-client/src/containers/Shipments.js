@@ -3,7 +3,7 @@ import { invokeApig } from "../libs/awsLib";
 import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import config from "../config";
-import "./Shipping.css";
+import "./Shipments.css";
 import AWS from "aws-sdk";
 AWS.config.update({ region: "us-east-2" });
 
@@ -11,12 +11,11 @@ export default class Shipments extends Component {
   constructor(props) {
     super(props);
 
-    // this.file = null;
     this.state = {
         shipment: {
-        isLoading: null,
-        isDeleting: null,
-        shipmentId: null,
+        isLoading: "null",
+        isDeleting: "null",
+        shipmentId: "",
         height: "",
         width: "",
         length: "",
@@ -31,6 +30,8 @@ export default class Shipments extends Component {
         mass_unit: ""
         }
       };
+       this.handleChange = this.handleChange.bind(this);
+       this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -61,13 +62,13 @@ export default class Shipments extends Component {
   }
 
   validateForm() {
-    if (this.state.shipment > 0) {
+    if(this.state.shipment > 0) {
       return this.state.shipment;
     }
     else {
         console.log('FAILLLLLLLLLLLLLLLLLLLLLLLLL');
     }
-  }
+  };
 
   handleChange = event => {
     this.setState({
@@ -84,16 +85,13 @@ export default class Shipments extends Component {
   }
 
   handleSubmit = async event => {
-    let uploadedFilename;
-
-    event.preventDefault();
-
+      event.preventDefault();
+        const { name, street1, city, state, zip, country, length, width, height, distance_unit, weight, mass_unit } = this.state.shipment;
     this.setState({ isLoading: true });
 
     try {
 
-      await this.saveShipment({
-        ...this.state.shipment,
+      this.saveShipment({
         name: this.state.shipment.name,
         street1: this.state.shipment.street1,
         city: this.state.shipment.city,
@@ -116,112 +114,126 @@ export default class Shipments extends Component {
 
   render() {
     return (
-      <div className="Shipping">
-        {this.state.shipment &&
+      <div className="Shipments">
           <form onSubmit={this.handleSubmit}>
             <FormGroup controlId="orders">
-              <ControlLabel>Select</ControlLabel>
+              <ControlLabel>Select Order</ControlLabel>
               <FormControl componentClass="select" placeholder="orders">
                 <option value="select">select</option>
                 <option value="other">...</option>
               </FormControl>
             </FormGroup>
             <FormGroup controlId="height">
+            <ControlLabel>Dimensions in Inches</ControlLabel>
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.height}
                 label="Height"
-                componentClass="text" />
+                placeholder="Height"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="width">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.width}
                 label="Width"
-                componentClass="text" />
+                placeholder="Width"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="length">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.length}
                 label="Length"
-                componentClass="text" />
+                placeholder="Length"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="weight">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.weight}
                 label="Weight"
-                componentClass="text" />
+                placeholder="Weight"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="distance_unit">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.distance_unit}
                 label="Distance Unit"
-                componentClass="text" />
+                placeholder="Distance Unit"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="mass_unit">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.mass_unit}
                 label="Mass Unit"
-                componentClass="text" />
+                placeholder="Mass Unit"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="name">
+            <ControlLabel>Shipping To</ControlLabel>
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.name}
                 label="Name"
-                componentClass="text" />
+                placeholder="Name"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="street1">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.street1}
                 label="Address Line 1"
-                componentClass="text" />
+                placeholder="Address Line 1"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="city">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.city}
                 label="City"
-                componentClass="text" />
+                placeholder="City"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="state">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.state}
                 label="State"
-                componentClass="text" />
+                placeholder="State"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="zip">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.zip}
                 label="Zip"
-                componentClass="text" />
+                placeholder="Zip"
+                type="text" />
             </FormGroup>
             <FormGroup controlId="country">
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.shipment.country}
                 label="Country"
-                componentClass="text" />
+                placeholder="US"
+                type="text" />
             </FormGroup>
 
             <LoaderButton
               block
               bsStyle="primary"
               bsSize="large"
-              disabled={!this.validateForm()}
+              //disabled={!this.validateForm()}
               type="submit"
               isLoading={this.state.isLoading}
               text="Save"
               loadingText="Saving…" />
-          </form>}
-      </div>
-    );
+          </form>
+          </div>
+        );
+
 }
 }
