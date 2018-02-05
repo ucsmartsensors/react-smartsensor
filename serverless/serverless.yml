@@ -53,4 +53,22 @@ functions:
           path: count/{id}
           method: get
           cors: true
-          authorizer: aws_iam
+          
+  iotGate:
+
+    handler: iotGate.main
+    events:
+      - http:
+          path: count/{id}
+          method: get
+          cors: true
+          
+
+  device:
+
+    handler: device.main
+    events:
+      - http:
+          path: count/{id}
+          method: get
+          cors: true
