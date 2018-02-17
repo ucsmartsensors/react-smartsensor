@@ -13,9 +13,7 @@ export default class Shipments extends Component {
 
     this.state = {
         shipment: {
-        isLoading: "null",
-        isDeleting: "null",
-        shipmentId: "",
+        isLoading: "",
         height: "",
         width: "",
         length: "",
@@ -34,41 +32,9 @@ export default class Shipments extends Component {
        this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  async componentDidMount() {
-    try {
-      const results = await this.getShipment();
-      this.setState({
-        shipment: results,
-        height: results.height,
-        width: results.width,
-        length: results.length,
-        weight: results.weight,
-        name: results.name,
-        street1: results.street1,
-        city: results.city,
-        state: results.state,
-        zip: results.zip,
-        country: results.county,
-        distance_unit: results.distance_unit,
-        mass_unit: results.mass_unit
-      });
-    } catch (e) {
-      alert(e);
-    }
-  }
-
-  getShipment() {
-    return invokeApig({ path: `/shipments/${this.props.match.params.id}` });
-  }
-
   validateForm() {
-    if(this.state.shipment > 0) {
-      return this.state.shipment;
-    }
-    else {
-        console.log('FAILLLLLLLLLLLLLLLLLLLLLLLLL');
-    }
-  };
+       return this.state.shipment;
+     };
 
   handleChange = event => {
     this.setState({
@@ -129,6 +95,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.height}
                 label="Height"
+                name="height"
                 placeholder="Height"
                 type="text" />
             </FormGroup>
@@ -137,6 +104,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.width}
                 label="Width"
+                name="width"
                 placeholder="Width"
                 type="text" />
             </FormGroup>
@@ -145,6 +113,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.length}
                 label="Length"
+                name="length"
                 placeholder="Length"
                 type="text" />
             </FormGroup>
@@ -153,6 +122,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.weight}
                 label="Weight"
+                name="weight"
                 placeholder="Weight"
                 type="text" />
             </FormGroup>
@@ -161,6 +131,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.distance_unit}
                 label="Distance Unit"
+                name="distance_unit"
                 placeholder="Distance Unit"
                 type="text" />
             </FormGroup>
@@ -169,6 +140,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.mass_unit}
                 label="Mass Unit"
+                name="mass_unit"
                 placeholder="Mass Unit"
                 type="text" />
             </FormGroup>
@@ -178,6 +150,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.name}
                 label="Name"
+                name="name"
                 placeholder="Name"
                 type="text" />
             </FormGroup>
@@ -186,6 +159,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.street1}
                 label="Address Line 1"
+                name="street1"
                 placeholder="Address Line 1"
                 type="text" />
             </FormGroup>
@@ -194,6 +168,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.city}
                 label="City"
+                name="city"
                 placeholder="City"
                 type="text" />
             </FormGroup>
@@ -202,6 +177,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.state}
                 label="State"
+                name="state"
                 placeholder="State"
                 type="text" />
             </FormGroup>
@@ -210,6 +186,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.zip}
                 label="Zip"
+                name="zip"
                 placeholder="Zip"
                 type="text" />
             </FormGroup>
@@ -218,6 +195,7 @@ export default class Shipments extends Component {
                 onChange={this.handleChange}
                 value={this.state.shipment.country}
                 label="Country"
+                name="country"
                 placeholder="US"
                 type="text" />
             </FormGroup>
@@ -226,7 +204,7 @@ export default class Shipments extends Component {
               block
               bsStyle="primary"
               bsSize="large"
-              //disabled={!this.validateForm()}
+              disabled={!this.validateForm()}
               type="submit"
               isLoading={this.state.isLoading}
               text="Save"

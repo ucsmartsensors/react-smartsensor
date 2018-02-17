@@ -45,56 +45,60 @@ class App extends Component {
       userHasAuthenticated: this.userHasAuthenticated
     };
 
-    return (
-      !this.state.isAuthenticating &&
-      <div className="App container">
-        <Navbar fluid collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav pullRight>
-              {this.state.isAuthenticated
-                ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
-                : [
-                    <RouteNavItem key={2} href="/signup">
-                      Signup
-                    </RouteNavItem>,
-                    <RouteNavItem key={3} href="/login">
-                      Login
-                    </RouteNavItem>
-                  ]}
-            </Nav>
-            <Nav pullLeft>
-            <NavDropdown eventKey={1} title="Menu" id="basic-nav-dropdown">
-              {this.state.isAuthenticated
-                ? <NavItem onClick={this.handleClick}>
-                <RouteNavItem key={1.1} href="/Count">
-                  Count
-                </RouteNavItem>
-      					<MenuItem divider />
-                <RouteNavItem key={1.2} href="/Status">
-                  Status
-                </RouteNavItem>
-      					<MenuItem divider />
-      					<RouteNavItem key={1.3} href="/Shipping">
-                Shipping
-                </RouteNavItem>
-                <MenuItem divider />
-      					<RouteNavItem key={1.4} href="/Shipments">
-                Shipments
-                </RouteNavItem>
-                </NavItem>
-                : [
+ const appNavbar = (
+   !this.state.isAuthenticating &&
+   <div className="App container">
+     <Navbar fluid collapseOnSelect>
+       <Navbar.Header>
+         <Navbar.Toggle />
+       </Navbar.Header>
+       <Navbar.Collapse>
+         <Nav pullRight>
+           {this.state.isAuthenticated
+             ? <NavItem onSelect={this.handleLogout}>Logout</NavItem>
+             : [
+                 <RouteNavItem key={1} href="/signup">
+                   Signup
+                 </RouteNavItem>,
+                 <RouteNavItem key={2} href="/login">
+                   Login
+                 </RouteNavItem>
+               ]}
+         </Nav>
+         <Nav pullLeft>
+         <NavDropdown eventKey={3} title="Menu" id="basic-nav-dropdown">
+           {this.state.isAuthenticated
+             ? <NavItem onSelect={this.handleClick}>
+             <RouteNavItem key={3.1} href="/Count">
+               Count
+             </RouteNavItem>
+             <MenuItem divider />
+             <RouteNavItem key={3.2} href="/Status">
+               Status
+             </RouteNavItem>
+             <MenuItem divider />
+             <RouteNavItem key={3.3} href="/Shipping">
+             Shipping
+             </RouteNavItem>
+             <MenuItem divider />
+             <RouteNavItem key={3.4} href="/Shipments">
+             Shipments
+             </RouteNavItem>
+             </NavItem>
+             : [
 
-                  ]}
-            </NavDropdown>
-            </Nav>
-        </Navbar.Collapse>
-    </Navbar>
-        <Routes childProps={childProps} />
+               ]}
+          </NavDropdown>
+         </Nav>
+     </Navbar.Collapse>
+ </Navbar>
+     <Routes childProps={childProps} />
+   </div>
+ );
+
+    return (
+      <div>
+        {appNavbar}
       </div>
     );
   }
