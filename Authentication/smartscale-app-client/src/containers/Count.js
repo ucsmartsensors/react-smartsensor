@@ -34,7 +34,6 @@ export default class Home extends Component {
 
   renderShipmentsList(shipments) {
     return (<div>
-<<<<<<< HEAD
       {this.state.shipments.map((shipment, index) => (
           <p key={index}> ShippingID:{shipment.shippingId}, OrderID:{shipment.orderId}, Weight:{shipment.weight}, QTY:{shipment.qty}, Total:{shipment.total} </p>
       ))}
@@ -42,31 +41,16 @@ export default class Home extends Component {
   }
  
   /*
-=======
-      {this.state.shipments.shippingId}
-      </div>);
-  }
-  
->>>>>>> 9032ba79f027bfdc25876687612b564857331caf
   handleNoteClick = event => {
     event.preventDefault();
     this.props.history.push(event.currentTarget.getAttribute("href"));
   }
-<<<<<<< HEAD
   */
   renderLander() {
     return (
       <div className="lander">
         <h1>Scratch</h1>
         <p>A simple note taking app</p>
-=======
-
-  renderLander() {
-    return (
-      <div className="lander">
-        <h1>SmartScale</h1>
-        <p>A Smart Order Fullfillment System</p>
->>>>>>> 9032ba79f027bfdc25876687612b564857331caf
       </div>
     );
   }
