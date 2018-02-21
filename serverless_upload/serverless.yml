@@ -50,6 +50,7 @@ functions:
     handler: get.main
     events:
       - http:
-          path: count/{id}
+          path: count
           method: get
           cors: true
+  
