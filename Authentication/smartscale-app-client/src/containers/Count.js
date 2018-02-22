@@ -17,7 +17,11 @@ export default class Home extends Component {
   
    updateSearch = (event) =>{
     this.setState({search: event.target.value.substr(0, 20)
+    
+      
+
     });
+    //console.log(this.state.search)
   }
   
   async componentDidMount() {
@@ -42,8 +46,8 @@ export default class Home extends Component {
  
   
   shipments() {
-    return invokeApig({ path: `/count/${this.state.search}` });
-    console.log(this.shipments)
+    return invokeApig({ path: `/count/${this.updateSearch}` });
+    console.log(this.state.search)
   }
 
   renderShipmentsList() {
@@ -65,9 +69,7 @@ export default class Home extends Component {
 
         })}
 
-<input type="text" value={this.state.search} 
-        onChange={this.updateSearch.bind(this)}
-        /> 
+
       
       </ul>
    
@@ -99,6 +101,9 @@ export default class Home extends Component {
         <ListGroup>
           {!this.state.isLoading && this.renderShipmentsList(this.state.shipments)}
           
+          <input type="text" value={this.state.search} 
+        onChange={this.updateSearch.bind(this)}
+        /> 
           
         </ListGroup>
       </div>
