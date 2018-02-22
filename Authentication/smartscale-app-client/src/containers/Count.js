@@ -9,34 +9,71 @@ export default class Home extends Component {
 
     this.state = {
       isLoading: true,
-      shipments: []
+      shipments: [],
+      search: '1'
     };
-  }
+   }
 
+  
+   updateSearch = (event) =>{
+    this.setState({search: event.target.value.substr(0, 20)
+    });
+  }
+  
   async componentDidMount() {
     if (!this.props.isAuthenticated) {
       return;
     }
+    
   
+
     try {
       const results = await this.shipments();
       this.setState({ shipments: results });
     } catch (e) {
       alert(e);
     }
-  
-    this.setState({ isLoading: false });
-  }
-  
-  shipments() {
-    return invokeApig({ path: "/count/1" });
+   
+    this.setState({ isLoading: true });
+    
   }
 
-  renderShipmentsList(shipments) {
+ 
+ 
+  
+  shipments() {
+    return invokeApig({ path: `/count/${this.state.search}` });
+    console.log(this.shipments)
+  }
+
+  renderShipmentsList() {
+    let filteredShipments = this.props.shipments.filter(
+     (shipment) => {
+      return shipment.shippingId.indexOf(this.state.
+        search) !==1;
+
+      }
+        
+    );
+  /* <p key={shipment.shippingId}> ShippingID:{shipment.shippingId}, OrderID:{shipment.orderId}, Weight:{shipment.weight}, QTY:{shipment.qty}, Total:{shipment.total} </p> */   
+
     return (<div>
-      {this.state.shipments.map((shipment, index) => (
-          <p key={index}> ShippingID:{shipment.shippingId}, OrderID:{shipment.orderId}, Weight:{shipment.weight}, QTY:{shipment.qty}, Total:{shipment.total} </p>
-      ))}
+      <ul>
+        {filteredShipments.map((shipment)=> {  
+          return <Home shipment={shipment}
+            key={shipment.shippingId}/>
+
+        })}
+
+<input type="text" value={this.state.search} 
+        onChange={this.updateSearch.bind(this)}
+        /> 
+      
+      </ul>
+   
+        
+        
+
       </div>);
   }
  
@@ -60,7 +97,9 @@ export default class Home extends Component {
       <div className="notes">
         <PageHeader>Your Orders</PageHeader>
         <ListGroup>
-          {!this.state.isLoading && this.renderShipmentsList(this.state.notes)}
+          {!this.state.isLoading && this.renderShipmentsList(this.state.shipments)}
+          
+          
         </ListGroup>
       </div>
     );
