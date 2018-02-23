@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Home.css";
 import { invokeApig } from '../libs/awsLib';
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
+import { PageHeader, ListGroup, ListGroupItem, FormControl } from "react-bootstrap";
 
 export default class Home extends Component {
   constructor(props) {
@@ -11,85 +11,74 @@ export default class Home extends Component {
       isLoading: true,
       shipments: [],
       search: '1'
+
     };
-   }
-
-  
-   updateSearch = (event) =>{
-    this.setState({search: event.target.value.substr(0, 20)
-    
-      
-
-    });
-    //console.log(this.state.search)
+    this.updateSearch = this.updateSearch.bind(this)
+    this.shipments = this.shipments.bind(this)
   }
-  
-  async componentDidMount() {
+
+  componentDidMount() {
     if (!this.props.isAuthenticated) {
       return;
     }
-    
-  
-
+  /*
     try {
-      const results = await this.shipments();
-      this.setState({ shipments: results });
-    } catch (e) {
-      alert(e);
+     const results = await this.shipments(this.state.search);
+     this.setState({ shipments: results });
+   } catch (e) {
+    
+    alert(e);
     }
    
-    this.setState({ isLoading: true });
-    
+    this.setState({ isLoading: false });
+  */ 
   }
 
- 
+  
  
   
-  shipments() {
-    return invokeApig({ path: `/count/${this.updateSearch}` });
-    console.log(this.state.search)
-  }
+  async shipments(event) {
 
+    event.preventDefault()
+    
+    const results = await invokeApig({ path: `/count/${this.state.search}` });
+    console.log(results)
+    this.setState({ shipments: results });
+   
+    }
+
+    updateSearch = (event) =>{
+      this.setState({search: event.target.value.substr(0, 20)
+      
+      });
+
+      console.log(this.state.search)
+    }
+    
   renderShipmentsList() {
-    let filteredShipments = this.props.shipments.filter(
-     (shipment) => {
-      return shipment.shippingId.indexOf(this.state.
-        search) !==1;
-
-      }
-        
-    );
-  /* <p key={shipment.shippingId}> ShippingID:{shipment.shippingId}, OrderID:{shipment.orderId}, Weight:{shipment.weight}, QTY:{shipment.qty}, Total:{shipment.total} </p> */   
+    console.log(this.state)
 
     return (<div>
       <ul>
-        {filteredShipments.map((shipment)=> {  
-          return <Home shipment={shipment}
-            key={shipment.shippingId}/>
+        {this.state.shipments.map((shipment)=> {  
+          return <li shipment={shipment} 
+            key={shipment.shippingId}> 
+            ShippingId:{shipment.shippingId}, 
+            OrderId:{shipment.orderId},
+            weight:{shipment.weight},
+            qty:{shipment.qty},
+            Total:{shipment.total}, </li>
 
         })}
-
-
-      
-      </ul>
-   
-        
-        
-
+        </ul>
       </div>);
   }
  
-  /*
-  handleNoteClick = event => {
-    event.preventDefault();
-    this.props.history.push(event.currentTarget.getAttribute("href"));
-  }
-  */
   renderLander() {
     return (
       <div className="lander">
-        <h1>Scratch</h1>
-        <p>A simple note taking app</p>
+        <h1>Orders</h1>
+        <p>A Smart Order Fullfilment App</p>
       </div>
     );
   }
@@ -98,13 +87,20 @@ export default class Home extends Component {
     return (
       <div className="notes">
         <PageHeader>Your Orders</PageHeader>
-        <ListGroup>
-          {!this.state.isLoading && this.renderShipmentsList(this.state.shipments)}
+       
+          {!this.state.isLoading }
           
+          <form onSubmit={this.shipments}>
+
           <input type="text" value={this.state.search} 
-        onChange={this.updateSearch.bind(this)}
-        /> 
+        onChange={this.updateSearch}
+
+        />
+        <button> Search </button> 
+         </form> 
           
+         <ListGroup>
+         {this.renderShipmentsList(this.state.shipments)}
         </ListGroup>
       </div>
     );
