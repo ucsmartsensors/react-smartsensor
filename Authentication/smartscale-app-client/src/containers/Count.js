@@ -55,19 +55,21 @@ export default class Home extends Component {
       console.log(this.state.search)
     }
     
+
+    
   renderShipmentsList() {
     console.log(this.state)
 
     return (<div>
       <ul>
         {this.state.shipments.map((shipment)=> {  
-          return <li shipment={shipment} 
+          return <button shipment={shipment} 
             key={shipment.shippingId}> 
             ShippingId:{shipment.shippingId}, 
             OrderId:{shipment.orderId},
             weight:{shipment.weight},
             qty:{shipment.qty},
-            Total:{shipment.total}, </li>
+            Total:{shipment.total}, </button>
 
         })}
         </ul>
