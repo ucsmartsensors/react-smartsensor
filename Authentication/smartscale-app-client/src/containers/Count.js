@@ -85,7 +85,7 @@ export default class Home extends Component {
 
   renderShipments() {
     return (
-      <div className="notes">
+      <div className="count">
         <PageHeader>Your Orders</PageHeader>
        
           {!this.state.isLoading }
