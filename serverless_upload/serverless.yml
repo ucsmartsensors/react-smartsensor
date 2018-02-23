@@ -35,14 +35,17 @@ functions:
   # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
   #     domain api call
   # - authorizer: authenticate using the AWS IAM role
-  create:
-    handler: create.main
+ 
+
+  count:
+    handler: count.main
     events:
       - http:
-          path: shipping
+          path: countData/{id}
           method: post
           cors: true
-
+          authorizer: aws_iam  
+  
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /count/{id}
@@ -55,6 +58,8 @@ functions:
           cors: true
           authorizer: aws_iam
 
+
+    
 
 
          
