@@ -35,34 +35,58 @@ functions:
   # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
   #     domain api call
   # - authorizer: authenticate using the AWS IAM role
-  create:
-    handler: create.main
+ 
+
+  count:
+    handler: count.main
     events:
       - http:
-          path: shipping
+          path: countData/{id}
+          method: post
+          cors: true
+          authorizer: aws_iam  
+  
+  get:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /count/{id}
+    # - method: GET request
+    handler: get.main
+    events:
+      - http:
+          path: count/{id}
+          method: get
+          cors: true
+  validate:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /count/{id}
+    # - method: GET request
+    handler: validateOrder.main
+    events:
+      - http:
+          path: validate
+          method: get
+          cors: true
+  
+  createShipment:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /count/{id}
+    # - method: POST request
+    handler: shipment.create
+    events:
+      - http:
+          path: shipment
           method: post
           cors: true
 
-  get:
+  createShipmentTransaction:
     # Defines an HTTP API endpoint that calls the main function in get.js
-    # - path: url path is /notes/{id}
+    # - path: url path is /count/{id}
     # - method: GET request
-    handler: get.main
+    handler: shipment.createTransaction
     events:
       - http:
-          path: count
-          method: get
+          path: shipment/transaction
+          method: post
           cors: true
 
-  
-   :
-    # Defines an HTTP API endpoint that calls the main function in get.js
-    # - path: url path is /notes/{id}
-    # - method: GET request
-    handler: get.main
-    events:
-      - http:
-          path: count
-          method: get
-          cors: true
   

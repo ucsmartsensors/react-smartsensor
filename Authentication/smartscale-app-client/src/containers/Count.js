@@ -53,6 +53,8 @@ export default class Home extends Component {
       console.log(this.state.search)
     }
     
+
+    
   renderShipmentsList() {
     console.log(this.state)
 
