@@ -31,11 +31,9 @@ export default class Home extends Component {
     }
    
     this.setState({ isLoading: false });
-  */ 
+  */
   }
 
-  
- 
   
   async shipments(event) {
 
@@ -61,13 +59,13 @@ export default class Home extends Component {
     return (<div>
       <ul>
         {this.state.shipments.map((shipment)=> {  
-          return <li shipment={shipment} 
+          return <button shipment={shipment} 
             key={shipment.shippingId}> 
             ShippingId:{shipment.shippingId}, 
             OrderId:{shipment.orderId},
             weight:{shipment.weight},
             qty:{shipment.qty},
-            Total:{shipment.total}, </li>
+            Total:{shipment.total}, </button>
 
         })}
         </ul>
@@ -98,7 +96,7 @@ export default class Home extends Component {
         />
         <button> Search </button> 
          </form> 
-          
+          <p></p>
          <ListGroup>
          {this.renderShipmentsList(this.state.shipments)}
         </ListGroup>
