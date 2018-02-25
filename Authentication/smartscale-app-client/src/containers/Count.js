@@ -32,11 +32,9 @@ export default class Home extends Component {
     }
    
     this.setState({ isLoading: false });
-  */ 
+  */
   }
 
-  
- 
   
   async shipments(event) {
 
@@ -116,7 +114,7 @@ export default class Home extends Component {
         />
         <button> Search </button> 
          </form> 
-          
+          <p></p>
          <ListGroup>
          {this.renderShipmentsList(this.state.shipments)}
         </ListGroup>

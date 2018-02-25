@@ -56,11 +56,37 @@ functions:
           path: count/{id}
           method: get
           cors: true
-          authorizer: aws_iam
+  validate:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /count/{id}
+    # - method: GET request
+    handler: validateOrder.main
+    events:
+      - http:
+          path: validate
+          method: get
+          cors: true
+  
+  createShipment:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /count/{id}
+    # - method: POST request
+    handler: shipment.create
+    events:
+      - http:
+          path: shipment
+          method: post
+          cors: true
 
+  createShipmentTransaction:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /count/{id}
+    # - method: GET request
+    handler: shipment.createTransaction
+    events:
+      - http:
+          path: shipment/transaction
+          method: post
+          cors: true
 
-    
-
-
-         
   
