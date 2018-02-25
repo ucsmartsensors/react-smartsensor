@@ -19,16 +19,16 @@ Return PUT countData/measuredWeight
 export async function main(event, context, callback) {
   const data = JSON.parse(event.body);
   const params = {
-    TableName: "Orders",
+    TableName: "scaleData",
     Item: {
       shippingId: data.shippingId,
+      orderId: data.orderId,
       weight: data.weight,
-    
-      //createdAt: new Date().getTime(),
+      qty: data.qty, 
+      total: data.total, 
+     createdAt: new Date().getTime(),
     },
-    KeyConditionExpression: "shippingId = :shippingId",
-    ExpressionAttributeValues: {
-      ":shippingId":  event.pathParameters.id }
+
 };
 
   try {

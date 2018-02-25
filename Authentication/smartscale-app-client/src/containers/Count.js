@@ -10,7 +10,8 @@ export default class Home extends Component {
     this.state = {
       isLoading: true,
       shipments: [],
-      search: '1'
+      search: '',
+      
 
     };
     this.updateSearch = this.updateSearch.bind(this)
@@ -43,8 +44,8 @@ export default class Home extends Component {
     
     const results = await invokeApig({ path: `/count/${this.state.search}` });
     console.log(results)
-    this.setState({ shipments: results });
-   
+       this.setState({ shipments: results });
+
     }
 
     updateSearch = (event) =>{
@@ -55,15 +56,30 @@ export default class Home extends Component {
       console.log(this.state.search)
     }
     
-
     
+
+  async onHandleClick(shipment) {
+  
+      const results = invokeApig({
+        path: "/countData/",
+        method: "POST",
+        body: shipment
+
+      });
+      
+    }
+  
+    //this.sendCount(shipment.shippingId)
+
+
   renderShipmentsList() {
     console.log(this.state)
 
     return (<div>
       <ul>
         {this.state.shipments.map((shipment)=> {  
-          return <button shipment={shipment} 
+          return <button onClick={() => this.onHandleClick(shipment)} 
+            shipment={shipment} 
             key={shipment.shippingId}> 
             ShippingId:{shipment.shippingId}, 
             OrderId:{shipment.orderId},
