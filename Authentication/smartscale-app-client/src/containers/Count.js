@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./Home.css";
 import { invokeApig } from '../libs/awsLib';
 import { PageHeader, ListGroup, ListGroupItem, FormControl } from "react-bootstrap";
+import { Button } from 'semantic-ui-react'
 
 export default class Home extends Component {
   constructor(props) {
@@ -10,7 +11,8 @@ export default class Home extends Component {
     this.state = {
       isLoading: true,
       shipments: [],
-      search: '1'
+      search: '',
+      
 
     };
     this.updateSearch = this.updateSearch.bind(this)
@@ -41,8 +43,8 @@ export default class Home extends Component {
     
     const results = await invokeApig({ path: `/count/${this.state.search}` });
     console.log(results)
-    this.setState({ shipments: results });
-   
+       this.setState({ shipments: results });
+
     }
 
     updateSearch = (event) =>{
@@ -53,21 +55,36 @@ export default class Home extends Component {
       console.log(this.state.search)
     }
     
-
     
+
+  async onHandleClick(shipment) {
+  
+      const results = invokeApig({
+        path: "/countData/",
+        method: "POST",
+        body: shipment
+
+      });
+      
+    }
+  
+    //this.sendCount(shipment.shippingId)
+
+
   renderShipmentsList() {
     console.log(this.state)
 
     return (<div>
       <ul>
         {this.state.shipments.map((shipment)=> {  
-          return <button shipment={shipment} 
+          return <Button onClick={() => this.onHandleClick(shipment)} 
+            shipment={shipment} 
             key={shipment.shippingId}> 
             ShippingId:{shipment.shippingId}, 
             OrderId:{shipment.orderId},
             weight:{shipment.weight},
             qty:{shipment.qty},
-            Total:{shipment.total}, </button>
+            Total:{shipment.total}, </Button>
 
         })}
         </ul>
@@ -96,7 +113,7 @@ export default class Home extends Component {
         onChange={this.updateSearch}
 
         />
-        <button> Search </button> 
+        <Button> Search </Button> 
          </form> 
           <p></p>
          <ListGroup>
