@@ -30,6 +30,7 @@ export default class Shipments extends Component {
       };
        this.handleChange = this.handleChange.bind(this);
        this.handleSubmit = this.handleSubmit.bind(this);
+     //  this.handleSelect = this.handleSelect.bind(this);
   }
 
   validateForm() {
@@ -42,41 +43,111 @@ export default class Shipments extends Component {
     });
   }
 
-  saveShipment(shipment) {
-    return invokeApig({
-      path: `/shipments/${this.props.match.params.id}`,
-      method: "PUT",
-      body: shipment
-    });
+  handleSelect = async (data) => {
+    const postData={rateId: data.object_id}
+    const result = await this.saveTransaction(postData)
+    window.open(result.label_url, "_blank")
+    
   }
+
+
+  saveShipment(body) {
+     return invokeApig({
+       path: `/shipment/`,
+       method: "POST",
+       body 
+     });
+    console.log(body)
+  }
+
+  saveTransaction(body) {
+    return invokeApig({
+      path: `/shipment/transaction`,
+      method: "POST",
+      body 
+    });
+   console.log(body)
+ }
 
   handleSubmit = async event => {
       event.preventDefault();
+      const form = new FormData(event.target)
+      const postData = { 
+        addressFrom: {
+      
+          name: "Noah Larson" ,
+          street1: "1010 cool street",
+          city: "Cincinnati",
+          state: "Ohio",
+          zip: "45208",
+          country: "US",
+          
+        },
+
+        addressTo: {
+      
+          name: form.get('name'),
+          street1: form.get('street1'),
+          city: form.get('city'),
+          state: form.get('state'),
+          zip: form.get('zip'),
+          country: form.get('country'),
+          
+        },
+        parcel: {
+      
+          length: form.get('length'),
+          width: form.get('width'),
+          height: form.get('height'),
+          weight: form.get('weight'),
+          mass_unit: form.get('mass_unit'),
+          distance_unit: form.get('distance_unit') 
+          
+        },
+
+
+      }
+      console.log(postData) 
+    const results = await this.saveShipment(postData)
+      this.state.response = results 
+
         const { name, street1, city, state, zip, country, length, width, height, distance_unit, weight, mass_unit } = this.state.shipment;
     this.setState({ isLoading: true });
 
-    try {
-
-      this.saveShipment({
-        name: this.state.shipment.name,
-        street1: this.state.shipment.street1,
-        city: this.state.shipment.city,
-        state: this.state.shipment.state,
-        zip: this.state.shipment.zip,
-        country: this.state.shipment.country,
-        length: this.state.shipment.length,
-        width: this.state.shipment.width,
-        height: this.state.shipment.height,
-        distance_unit: this.state.shipment.distance_unit,
-        weight: this.state.shipment.weight,
-        mass_unit: this.shipment.mass_unit,
-      });
-      this.props.history.push("/");
-    } catch (e) {
-      alert(e);
-      this.setState({ isLoading: false });
-    }
   }
+
+  renderResponse() {
+    return(
+      <div>
+        <table>
+          <thead> 
+            <tr>
+              <th>Amount</th>
+              <th>Provider</th>
+              <th>Estimated Days</th>
+              <th></th>
+          
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.response.map(response => {
+              return(
+                <tr key={response.object_id}>
+                <td>{response.amount}</td>
+                <td>{response.provider}</td>
+                <td>{response.estimated_days}</td>
+                <td><button onClick={this.handleSelect.bind(this,response)}>Select</button></td>
+                </tr>
+              )
+            })}
+            </tbody>
+          </table>
+      </div>
+    )
+    
+
+  }
+
 
   render() {
     return (
@@ -93,7 +164,7 @@ export default class Shipments extends Component {
             <ControlLabel>Dimensions in Inches</ControlLabel>
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.height}
+              
                 label="Height"
                 name="height"
                 placeholder="Height"
@@ -102,7 +173,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="width">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.width}
+               
                 label="Width"
                 name="width"
                 placeholder="Width"
@@ -111,7 +182,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="length">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.length}
+              
                 label="Length"
                 name="length"
                 placeholder="Length"
@@ -120,7 +191,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="weight">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.weight}
+                
                 label="Weight"
                 name="weight"
                 placeholder="Weight"
@@ -129,7 +200,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="distance_unit">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.distance_unit}
+       
                 label="Distance Unit"
                 name="distance_unit"
                 placeholder="Distance Unit"
@@ -138,7 +209,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="mass_unit">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.mass_unit}
+             
                 label="Mass Unit"
                 name="mass_unit"
                 placeholder="Mass Unit"
@@ -148,7 +219,7 @@ export default class Shipments extends Component {
             <ControlLabel>Shipping To</ControlLabel>
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.name}
+               
                 label="Name"
                 name="name"
                 placeholder="Name"
@@ -157,7 +228,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="street1">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.street1}
+                
                 label="Address Line 1"
                 name="street1"
                 placeholder="Address Line 1"
@@ -166,7 +237,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="city">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.city}
+                
                 label="City"
                 name="city"
                 placeholder="City"
@@ -175,7 +246,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="state">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.state}
+              
                 label="State"
                 name="state"
                 placeholder="State"
@@ -184,7 +255,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="zip">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.zip}
+                
                 label="Zip"
                 name="zip"
                 placeholder="Zip"
@@ -193,7 +264,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="country">
               <FormControl
                 onChange={this.handleChange}
-                value={this.state.shipment.country}
+           
                 label="Country"
                 name="country"
                 placeholder="US"
@@ -210,6 +281,8 @@ export default class Shipments extends Component {
               text="Save"
               loadingText="Saving…" />
           </form>
+          {this.state.response && this.renderResponse()}
+
           </div>
         );
 
