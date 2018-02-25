@@ -41,10 +41,10 @@ functions:
     handler: count.main
     events:
       - http:
-          path: countData/{id}
+          path: countData
           method: post
           cors: true
-          authorizer: aws_iam  
+          
   
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
@@ -56,6 +56,7 @@ functions:
           path: count/{id}
           method: get
           cors: true
+ 
   validate:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /count/{id}
