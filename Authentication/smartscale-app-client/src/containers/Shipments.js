@@ -50,7 +50,6 @@ export default class Shipments extends Component {
     
   }
 
-
   saveShipment(body) {
      return invokeApig({
        path: `/shipment/`,
@@ -75,13 +74,12 @@ export default class Shipments extends Component {
       const postData = { 
         addressFrom: {
       
-          name: "Noah Larson" ,
-          street1: "1010 cool street",
-          city: "Cincinnati",
-          state: "Ohio",
-          zip: "45208",
+          name: "Russell Marks" ,
+          street1: "5493 Brandywine Lane",
+          city: "Milford",
+          state: "OH",
+          zip: "45150",
           country: "US",
-          
         },
 
         addressTo: {
@@ -91,8 +89,8 @@ export default class Shipments extends Component {
           city: form.get('city'),
           state: form.get('state'),
           zip: form.get('zip'),
-          country: form.get('country'),
-          
+          country: form.get('country')
+
         },
         parcel: {
       
@@ -111,14 +109,14 @@ export default class Shipments extends Component {
     const results = await this.saveShipment(postData)
       this.state.response = results 
 
-        const { name, street1, city, state, zip, country, length, width, height, distance_unit, weight, mass_unit } = this.state.shipment;
+        const { name, street1, city, state, zip, country, phone, email, length, width, height, distance_unit, weight, mass_unit } = this.state.shipment;
     this.setState({ isLoading: true });
 
   }
 
   renderResponse() {
     return(
-      <div>
+      <div className="rateDisplay">
         <table>
           <thead> 
             <tr>
@@ -135,8 +133,9 @@ export default class Shipments extends Component {
                 <tr key={response.object_id}>
                 <td>{response.amount}</td>
                 <td>{response.provider}</td>
-                <td>{response.estimated_days}</td>
-                <td><button onClick={this.handleSelect.bind(this,response)}>Select</button></td>
+                {/*<td>{response.estimated_days}</td>*/}
+                <div className="duration"><td>{response.duration_terms}</td></div>
+                <td><button onClick={this.handleSelect.bind(this,response)}>Buy</button></td>
                 </tr>
               )
             })}
@@ -203,7 +202,7 @@ export default class Shipments extends Component {
        
                 label="Distance Unit"
                 name="distance_unit"
-                placeholder="Distance Unit"
+                placeholder="in"
                 type="text" />
             </FormGroup>
             <FormGroup controlId="mass_unit">
@@ -212,7 +211,7 @@ export default class Shipments extends Component {
              
                 label="Mass Unit"
                 name="mass_unit"
-                placeholder="Mass Unit"
+                placeholder="lb"
                 type="text" />
             </FormGroup>
             <FormGroup controlId="name">
@@ -270,7 +269,7 @@ export default class Shipments extends Component {
                 placeholder="US"
                 type="text" />
             </FormGroup>
-
+          
             <LoaderButton
               block
               bsStyle="primary"
@@ -278,8 +277,8 @@ export default class Shipments extends Component {
               disabled={!this.validateForm()}
               type="submit"
               isLoading={this.state.isLoading}
-              text="Save"
-              loadingText="Saving…" />
+              text="Send"
+              loadingText="Receiving Rates…" />
           </form>
           {this.state.response && this.renderResponse()}
 

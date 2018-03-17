@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./Home.css";
 import { invokeApig } from '../libs/awsLib';
 import { PageHeader, ListGroup, ListGroupItem, FormControl } from "react-bootstrap";
-import { Button } from 'semantic-ui-react'
 
 export default class Home extends Component {
   constructor(props) {
@@ -12,6 +11,7 @@ export default class Home extends Component {
       isLoading: true,
       shipments: [],
       search: '',
+      confirm: false,
       
 
     };
@@ -36,7 +36,18 @@ export default class Home extends Component {
   */
   }
 
-  
+ShowHideTextComponentView = () =>{
+ 
+  if(this.state.confirm == true)
+  {
+    this.setState({confirm: false})
+  }
+  else
+  {
+    this.setState({confirm: true})
+  }
+};
+
   async shipments(event) {
 
     event.preventDefault()
@@ -75,22 +86,30 @@ export default class Home extends Component {
     console.log(this.state)
 
     return (<div>
-      <ul>
         {this.state.shipments.map((shipment)=> {  
-          return <Button onClick={() => this.onHandleClick(shipment)} 
+          return <button onClick={() => this.onHandleClick(shipment)} 
             shipment={shipment} 
             key={shipment.shippingId}> 
             ShippingId:{shipment.shippingId}, 
             OrderId:{shipment.orderId},
             weight:{shipment.weight},
             qty:{shipment.qty},
-            Total:{shipment.total}, </Button>
+            Total:{shipment.total}, </button>
 
         })}
-        </ul>
       </div>);
   }
  
+  renderResponse() {
+    return(
+      <div className="Confirm">
+       {this.state.confirm ? <p>Order data has been sent to the scale.</p> :null}
+      <button onClick={this.ShowHideTextComponentView}>Confirm</button>
+      </div>
+    )
+  
+  }
+
   renderLander() {
     return (
       <div className="lander">
@@ -102,8 +121,8 @@ export default class Home extends Component {
 
   renderShipments() {
     return (
-      <div className="count">
-        <PageHeader>Your Orders</PageHeader>
+      <div className="Count">
+        <PageHeader className="Count">Orders</PageHeader>
        
           {!this.state.isLoading }
           
@@ -113,7 +132,7 @@ export default class Home extends Component {
         onChange={this.updateSearch}
 
         />
-        <Button> Search </Button> 
+        <button> Search </button> 
          </form> 
           <p></p>
          <ListGroup>
@@ -125,8 +144,9 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="Home">
+      <div className="Count">
         {this.props.isAuthenticated ? this.renderShipments() : this.renderLander()}
+        {this.props.isAuthenticated ? this.renderResponse() : this.renderLander()}
       </div>
     );
   }
