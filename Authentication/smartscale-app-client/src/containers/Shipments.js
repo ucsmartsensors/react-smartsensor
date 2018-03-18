@@ -26,11 +26,36 @@ export default class Shipments extends Component {
         country: "",
         distance_unit: "",
         mass_unit: ""
+        },
+
+        options: {
+          fulfilled: [],
+          selected: ""
         }
       };
        this.handleChange = this.handleChange.bind(this);
        this.handleSubmit = this.handleSubmit.bind(this);
      //  this.handleSelect = this.handleSelect.bind(this);
+  }
+  
+ async componentDidMount() {
+    if (!this.props.isAuthenticated) {
+      return;
+    }
+    try {
+      const validateResults = await this.validate();
+      this.setState({ fulfilled: validateResults });
+      console.log(this)
+    } catch (e) {
+      alert(e);
+      console.log(e)
+    }
+  
+    this.setState({ isLoading: false });
+  }
+  
+  validate() {
+    return invokeApig({ path: "/validate" });
   }
 
   validateForm() {
@@ -50,6 +75,18 @@ export default class Shipments extends Component {
     
   }
 
+  /*
+  async onHandleClick(shipment) {
+  
+    const results = invokeApig({
+      path: "/validate/",
+      method: "GET",
+      body: shipment
+
+    });
+    
+  }
+*/
 
   saveShipment(body) {
      return invokeApig({
@@ -75,12 +112,17 @@ export default class Shipments extends Component {
       const postData = { 
         addressFrom: {
       
-          name: "Noah Larson" ,
-          street1: "1010 cool street",
-          city: "Cincinnati",
-          state: "Ohio",
-          zip: "45208",
+          name: "smartscale",
+          company: "",
+          street_no: "",
+          street1: "3508 MOONEY AVE",
+          street2: "",
+          city: "CINCINNATI",
+          state: "OH",
+          zip: "45208-1317",
           country: "US",
+          phone: "1234567890",
+          email: "ucsmartsensors@gmail.com"
           
         },
 
@@ -91,7 +133,7 @@ export default class Shipments extends Component {
           city: form.get('city'),
           state: form.get('state'),
           zip: form.get('zip'),
-          country: form.get('country'),
+          country: form.get('country')
           
         },
         parcel: {
@@ -99,9 +141,10 @@ export default class Shipments extends Component {
           length: form.get('length'),
           width: form.get('width'),
           height: form.get('height'),
+          distance_unit: form.get('distance_unit'),
           weight: form.get('weight'),
-          mass_unit: form.get('mass_unit'),
-          distance_unit: form.get('distance_unit') 
+          mass_unit: form.get('mass_unit')
+           
           
         },
 
@@ -137,6 +180,7 @@ export default class Shipments extends Component {
                 <td>{response.provider}</td>
                 <td>{response.estimated_days}</td>
                 <td><button onClick={this.handleSelect.bind(this,response)}>Select</button></td>
+                <td><button onClick={this.handleSelect.bind(this,response)}>Select</button></td>
                 </tr>
               )
             })}
@@ -157,7 +201,11 @@ export default class Shipments extends Component {
               <ControlLabel>Select Order</ControlLabel>
               <FormControl componentClass="select" placeholder="orders">
                 <option value="select">select</option>
-                <option value="other">...</option>
+                
+                {this.state.options.fulfilled.map((option, index) => {
+              return (<option key={index} value={option.shippingId}>{option.shippingId}</option>)
+                  })
+                }
               </FormControl>
             </FormGroup>
             <FormGroup controlId="height">

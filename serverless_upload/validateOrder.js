@@ -7,16 +7,17 @@ AWS.config.update({ region: "us-east-2" });
 export async function main(event, context, callback) {
   const params = {
     TableName: "Orders",
-    // 'KeyConditionExpression' defines the condition for the query
-    // - 'userId = :userId': only return items with matching 'userId'
-    //   partition key
-    // 'ExpressionAttributeValues' defines the value in the condition
-    // - ':userId': defines 'userId' to be Identity Pool identity id
-    //   of the authenticated user
+    IndexName: 'fulfilled-shippingId-index',
+
     KeyConditionExpression: "fulfilled = :fulfilled",
-    ExpressionAttributeValues: {
-      ":fulfilled":  true
-    }
+    FilterExpression: 'attribute_exists("fulfilled") AND ("fulfilled" = :val1 ) OR ("fulfilled" = :val2 )' ,
+   //FilterExpression : 'contains(fulfilled=true) OR fulfilled=false',
+   ExpressionAttributeValues: {
+    ":val1": "true",
+    ":val2": "false"
+  },
+  
+    
   };
 
 
@@ -29,3 +30,7 @@ export async function main(event, context, callback) {
       callback(null, failure({status: false}));
     }
   }
+
+
+
+  

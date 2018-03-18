@@ -55,7 +55,7 @@ export async function createTransaction(event, context, callback) {
     //create transaction from chosen rateID
     const transaction = await shippo.transaction.create({
       "rate": rateId,
-      "label_file_type": "PDF",
+      "label_file_type": "PDF_4x6",
       "async": false
   })
    //on successful API call, send back response of transaction to client
