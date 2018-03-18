@@ -4,7 +4,6 @@ import { Route, Switch } from "react-router-dom";
 import Home from "./containers/Home";
 import Status from "./containers/Status";
 import Count from "./containers/Count";
-import Shipping from "./containers/Shipping";
 import Shipments from "./containers/Shipments";
 import NotFound from "./containers/NotFound";
 import Signup from "./containers/Signup";
@@ -22,7 +21,6 @@ export default ({ childProps }) =>
   <AuthenticatedRoute path="/Count" exact component={Count} props={childProps} />
   <AuthenticatedRoute path="/Status" exact component={Status} props={childProps} />
   <AuthenticatedRoute path="/Shipments" exact component={Shipments} props={childProps} />
-  <AuthenticatedRoute path="/Shipping" exact component={Shipping} props={childProps} />
 
   { /* Finally, catch all unmatched routes */ }
   <Route component={NotFound} />

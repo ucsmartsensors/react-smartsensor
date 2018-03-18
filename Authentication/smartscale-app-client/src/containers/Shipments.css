@@ -10,8 +10,38 @@
 }
 
   .Shipments {
-    padding: 80px 0;
+    padding: 10px;
+    position: relative;
+    box-sizing: border-box;
+    background: #fff;
+    width: 100%;
+    border-radius: 2px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    display: inline-block;
     text-align: center;
+  }
+
+  .rateDisplay {
+    padding: 10px;
+    position: relative;
+    box-sizing: border-box;
+    background: rgb(205, 218, 255);
+    width: 100%;
+    border-radius: 2px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    display: inline-block;
+    text-align: center;
+  }
+
+  .duration {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-right: 5px;
+    border-radius: 2px;
+    display: inline-block;
   }
 
   .Shipments h1 {
@@ -23,7 +53,33 @@
     color: #999;
   }
 
-/*input[type=text] {
-  margin: 5px 8px;
-  box-sizing: border-box;
-}*/
+      /*.container {
+        padding: 12px;
+        position: relative;
+        box-sizing: border-box;
+        background: #fff;
+        border-radius: 2px;
+        margin: 25px;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        display: inline-block;
+        cursor: pointer;
+      }*/
+
+      /* Add a hover effect for buttons */
+  button:hover {
+    opacity: 0.8;
+}
+
+/* Set a style for all buttons 
+   button {
+      color: #FFF;
+      background-color: #444;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+  }*/
+th {
+  padding: 10px;
+}
