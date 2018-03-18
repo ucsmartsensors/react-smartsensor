@@ -77,11 +77,7 @@ class App extends Component {
                Status
              </RouteNavItem>
              <MenuItem divider />
-             <RouteNavItem key={3.3} href="/Shipping">
-             Shipping
-             </RouteNavItem>
-             <MenuItem divider />
-             <RouteNavItem key={3.4} href="/Shipments">
+             <RouteNavItem key={3.3} href="/Shipments">
              Shipments
              </RouteNavItem>
              </NavItem>
