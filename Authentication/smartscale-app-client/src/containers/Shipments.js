@@ -122,16 +122,16 @@ export default class Shipments extends Component {
       const postData = { 
         addressFrom: {
       
-          name: "smartscale",
+          name: "Noah",
           company: "",
           street_no: "",
           street1: "3508 MOONEY AVE",
           street2: "",
           city: "CINCINNATI",
           state: "OH",
-          zip: "45208-1317",
+          zip: "45208",
           country: "US",
-          phone: "1234567890",
+          phone: "5137205572",
           email: "ucsmartsensors@gmail.com"
           
         },
@@ -190,7 +190,7 @@ export default class Shipments extends Component {
                 <td>{response.provider}</td>
                 <td>{response.estimated_days}</td>
                 <td><button onClick={this.handleSelect.bind(this,response)}>Select</button></td>
-                <td><button onClick={this.handleSelect.bind(this,response)}>Select</button></td>
+           
                 </tr>
               )
             })}
@@ -253,7 +253,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="weight">
               <FormControl
                 onChange={this.handleChange}
-                
+                value={data.weight}
                 label="Weight"
                 name="weight"
                 placeholder="Weight"
@@ -262,7 +262,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="distance_unit">
               <FormControl
                 onChange={this.handleChange}
-       
+                
                 label="Distance Unit"
                 name="distance_unit"
                 placeholder="in"
@@ -271,7 +271,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="mass_unit">
               <FormControl
                 onChange={this.handleChange}
-                value={data.weight}
+                
                 label="Mass Unit"
                 name="mass_unit"
                 placeholder="lb"
