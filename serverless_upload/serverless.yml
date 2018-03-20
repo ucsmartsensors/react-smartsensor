@@ -79,6 +79,17 @@ functions:
           method: post
           cors: true
 
+  status:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /count/{id}
+    # - method: POST request
+    handler: getScaledata.main
+    events:
+      - http:
+          path: status
+          method: get
+          cors: true
+
   createShipmentTransaction:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /count/{id}

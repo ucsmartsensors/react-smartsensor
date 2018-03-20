@@ -4,8 +4,10 @@
 
 .App .navbar-brand {
   font-weight: bold;
+  
 }
 a {
-  color: #777;
+  color: #006;
   font-style: bold;
+  font-size: 110%;
 }

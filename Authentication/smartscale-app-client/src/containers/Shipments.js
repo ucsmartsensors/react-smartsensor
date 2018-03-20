@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 import { invokeApig } from "../libs/awsLib";
 import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
@@ -6,6 +8,7 @@ import config from "../config";
 import "./Shipments.css";
 import AWS from "aws-sdk";
 AWS.config.update({ region: "us-east-2" });
+
 
 export default class Shipments extends Component {
   constructor(props) {
@@ -25,7 +28,8 @@ export default class Shipments extends Component {
         zip: "",
         country: "",
         distance_unit: "",
-        mass_unit: ""
+        mass_unit: "",
+        fulfilledOrders: []
         },
 
         options: {
@@ -35,6 +39,7 @@ export default class Shipments extends Component {
       };
        this.handleChange = this.handleChange.bind(this);
        this.handleSubmit = this.handleSubmit.bind(this);
+       this.populateForm = this.populateForm.bind(this);
      //  this.handleSelect = this.handleSelect.bind(this);
   }
   
@@ -43,9 +48,16 @@ export default class Shipments extends Component {
       return;
     }
     try {
+      
+      //Get data from API call and setstate
       const validateResults = await this.validate();
-      this.setState({ fulfilled: validateResults });
+      console.log(validateResults);
+      this.setState({ fulfilledOrders: validateResults
+       });
+
       console.log(this)
+      
+    
     } catch (e) {
       alert(e);
       console.log(e)
@@ -54,9 +66,10 @@ export default class Shipments extends Component {
     this.setState({ isLoading: false });
   }
   
-  validate() {
-    return invokeApig({ path: "/validate" });
-  }
+  
+
+
+  
 
   validateForm() {
        return this.state.shipment;
@@ -75,22 +88,11 @@ export default class Shipments extends Component {
     
   }
 
-<<<<<<< HEAD
-  /*
-  async onHandleClick(shipment) {
-  
-    const results = invokeApig({
-      path: "/validate/",
-      method: "GET",
-      body: shipment
-
-    });
-    
+//API Calls
+  validate() {
+    return invokeApig({ path: "/validate" });
   }
-*/
 
-=======
->>>>>>> 171a3334d82da611b7b0f01a810739829a9d78dc
   saveShipment(body) {
      return invokeApig({
        path: `/shipment/`,
@@ -109,13 +111,17 @@ export default class Shipments extends Component {
    console.log(body)
  }
 
+  populateForm(selectedOption) {
+    this.setState({selectedOption})
+    console.log(selectedOption)
+  }
+
   handleSubmit = async event => {
       event.preventDefault();
       const form = new FormData(event.target)
       const postData = { 
         addressFrom: {
       
-<<<<<<< HEAD
           name: "smartscale",
           company: "",
           street_no: "",
@@ -128,14 +134,6 @@ export default class Shipments extends Component {
           phone: "1234567890",
           email: "ucsmartsensors@gmail.com"
           
-=======
-          name: "Russell Marks" ,
-          street1: "5493 Brandywine Lane",
-          city: "Milford",
-          state: "OH",
-          zip: "45150",
-          country: "US",
->>>>>>> 171a3334d82da611b7b0f01a810739829a9d78dc
         },
 
         addressTo: {
@@ -146,11 +144,7 @@ export default class Shipments extends Component {
           state: form.get('state'),
           zip: form.get('zip'),
           country: form.get('country')
-<<<<<<< HEAD
           
-=======
-
->>>>>>> 171a3334d82da611b7b0f01a810739829a9d78dc
         },
         parcel: {
       
@@ -194,15 +188,9 @@ export default class Shipments extends Component {
                 <tr key={response.object_id}>
                 <td>{response.amount}</td>
                 <td>{response.provider}</td>
-<<<<<<< HEAD
                 <td>{response.estimated_days}</td>
                 <td><button onClick={this.handleSelect.bind(this,response)}>Select</button></td>
                 <td><button onClick={this.handleSelect.bind(this,response)}>Select</button></td>
-=======
-                {/*<td>{response.estimated_days}</td>*/}
-                <div className="duration"><td>{response.duration_terms}</td></div>
-                <td><button onClick={this.handleSelect.bind(this,response)}>Buy</button></td>
->>>>>>> 171a3334d82da611b7b0f01a810739829a9d78dc
                 </tr>
               )
             })}
@@ -216,25 +204,29 @@ export default class Shipments extends Component {
 
 
   render() {
+    console.log(this.state.fulfilledOrders);
+    const value=this.state.selectedOption && this.state.selectedOption.shippingId
+    console.log(value)
+    const data = this.state.selectedOption || {}
     return (
       <div className="Shipments">
           <form onSubmit={this.handleSubmit}>
             <FormGroup controlId="orders">
               <ControlLabel>Select Order</ControlLabel>
-              <FormControl componentClass="select" placeholder="orders">
-                <option value="select">select</option>
-                
-                {this.state.options.fulfilled.map((option, index) => {
-              return (<option key={index} value={option.shippingId}>{option.shippingId}</option>)
-                  })
-                }
-              </FormControl>
+              
+              <Select
+              value={value}
+              valueKey={"shippingId"}
+              labelKey={"shippingId"}
+              onChange={this.populateForm}
+              options={this.state.fulfilledOrders}/>
+            
             </FormGroup>
             <FormGroup controlId="height">
             <ControlLabel>Dimensions in Inches</ControlLabel>
               <FormControl
                 onChange={this.handleChange}
-              
+                
                 label="Height"
                 name="height"
                 placeholder="Height"
@@ -279,7 +271,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="mass_unit">
               <FormControl
                 onChange={this.handleChange}
-             
+                value={data.weight}
                 label="Mass Unit"
                 name="mass_unit"
                 placeholder="lb"
@@ -289,7 +281,7 @@ export default class Shipments extends Component {
             <ControlLabel>Shipping To</ControlLabel>
               <FormControl
                 onChange={this.handleChange}
-               
+                value={data.name}
                 label="Name"
                 name="name"
                 placeholder="Name"
@@ -298,7 +290,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="street1">
               <FormControl
                 onChange={this.handleChange}
-                
+                value={data.street1}
                 label="Address Line 1"
                 name="street1"
                 placeholder="Address Line 1"
@@ -307,7 +299,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="city">
               <FormControl
                 onChange={this.handleChange}
-                
+                value={data.city}
                 label="City"
                 name="city"
                 placeholder="City"
@@ -316,7 +308,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="state">
               <FormControl
                 onChange={this.handleChange}
-              
+                value={data.state}
                 label="State"
                 name="state"
                 placeholder="State"
@@ -325,7 +317,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="zip">
               <FormControl
                 onChange={this.handleChange}
-                
+                value={data.zip}
                 label="Zip"
                 name="zip"
                 placeholder="Zip"
@@ -334,7 +326,7 @@ export default class Shipments extends Component {
             <FormGroup controlId="country">
               <FormControl
                 onChange={this.handleChange}
-           
+                value={data.country}
                 label="Country"
                 name="country"
                 placeholder="US"

@@ -86,17 +86,19 @@ ShowHideTextComponentView = () =>{
     console.log(this.state)
 
     return (<div>
+      <ListGroup>
         {this.state.shipments.map((shipment)=> {  
-          return <button onClick={() => this.onHandleClick(shipment)} 
+          return <ListGroupItem onClick={() => this.onHandleClick(shipment)} 
             shipment={shipment} 
             key={shipment.shippingId}> 
             ShippingId:{shipment.shippingId}, 
             OrderId:{shipment.orderId},
             weight:{shipment.weight},
             qty:{shipment.qty},
-            Total:{shipment.total}, </button>
+            Total:{shipment.total}, </ListGroupItem>
 
         })}
+        </ListGroup>
       </div>);
   }
  
@@ -127,6 +129,7 @@ ShowHideTextComponentView = () =>{
           {!this.state.isLoading }
           
           <form onSubmit={this.shipments}>
+          
 
           <input type="text" value={this.state.search} 
         onChange={this.updateSearch}
