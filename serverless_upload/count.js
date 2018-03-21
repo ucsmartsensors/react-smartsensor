@@ -19,7 +19,7 @@ Return PUT countData/measuredWeight
 export async function main(event, context, callback) {
   const data = JSON.parse(event.body);
   const params = {
-    TableName: "scaleData",
+    TableName: "Orders",
     Item: {
       shippingId: data.shippingId,
       orderId: data.orderId,

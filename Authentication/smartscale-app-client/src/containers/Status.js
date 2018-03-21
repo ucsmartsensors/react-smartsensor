@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Icon, Label, Menu, Table } from 'semantic-ui-react'
 import { invokeApig } from "../libs/awsLib";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
@@ -44,26 +45,41 @@ export default class Status extends Component {
 
 
   render() {
-    return (
-          <div>
-            <ListGroup>
-              
-             {this.state.status.map((shipment)=> {  
-          return <ListGroupItem bsStyle={shipment.fulfilled ? 'success' : 'danger'} 
 
+    return (
+      <div>
+      
+      
+   <Table>
+      <Table.Header>
+      <Table.Row positive>
+        <Table.HeaderCell>ShipmentId</Table.HeaderCell>
+        <Table.HeaderCell>OrderId</Table.HeaderCell>
+        <Table.HeaderCell>Weight</Table.HeaderCell>
+        <Table.HeaderCell>qty</Table.HeaderCell>
+        <Table.HeaderCell>total</Table.HeaderCell>
+      </Table.Row>
+    </Table.Header>   
+    <Table.Body>
     
-            shipment={shipment} 
-            key={shipment.shippingId}> 
-            ShippingId:{shipment.shippingId}, 
-            OrderId:{shipment.orderId},
-            weight:{shipment.weight},
-            qty:{shipment.qty},
-            Total:{shipment.total}, </ListGroupItem>
-             
-        })}
-        </ListGroup>
-            
-          </div>
+      
+      {this.state.status.map((shipment)=> {  
+    return <Table.Row key={shipment.shippingId} positive>
+      <Table.Cell>{shipment.shippingId}</Table.Cell>
+      <Table.Cell>{shipment.orderId}</Table.Cell>
+      <Table.Cell>{shipment.weight}</Table.Cell>
+      <Table.Cell>   {shipment.qty} </Table.Cell>
+      <Table.Cell> <Icon name='checkmark' />    {shipment.total} </Table.Cell>
+    </Table.Row>
+  
+ 
+       
+  })}
+    </Table.Body>
+  </Table>
+   
+    </div>
+    
         );
 
 }
