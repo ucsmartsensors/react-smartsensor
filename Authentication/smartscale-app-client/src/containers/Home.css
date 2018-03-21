@@ -1,10 +1,7 @@
 .Home .lander {
     padding: 80px 0;
     text-align: center;
-    background: #076585;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #fff, #076585);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #fff, #076585); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+    color: #333;
   }
   
   .Home .lander h1 {
@@ -13,10 +10,7 @@ background: linear-gradient(to right, #fff, #076585); /* W3C, IE 10+/ Edge, Fire
   }
   
   .Home .lander p {
-    background: #076585;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #fff, #076585);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #fff, #076585); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+    color: #333;
   }
 
   

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Icon, Label, Menu, Table } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { invokeApig } from "../libs/awsLib";
@@ -169,6 +171,9 @@ export default class Shipments extends Component {
 
   }
 
+
+
+  
   renderResponse() {
     return(
       <div className="rateDisplay">
