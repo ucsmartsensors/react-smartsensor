@@ -96,8 +96,13 @@ ShowHideTextComponentView = () =>{
             ShippingId:{shipment.shippingId}, 
             OrderId:{shipment.orderId},
             weight:{shipment.weight},
-            qty:{shipment.qty},
+            measuredweight:
+            measuredqty:{shipment.qty},
+            expectedqty:
+
             Total:{shipment.total}, </ListGroupItem>
+
+           
 
         })}
         </ListGroup>

@@ -1,0 +1,74 @@
+POST https://bajnfsvmna.execute-api.us-east-1.amazonaws.com/dev/first-endpoint
+
+{
+  "name": "xavier",
+  "role": "devops"
+}
+
+###
+
+GET https://apkqe4wywd.execute-api.us-east-1.amazonaws.com/dev/scales
+
+###
+
+GET https://apkqe4wywd.execute-api.us-east-1.amazonaws.com/dev/shippings
+
+###
+
+POST https://apkqe4wywd.execute-api.us-east-1.amazonaws.com/dev/scales
+content-type: application/json
+
+{
+  "deviceID": "awsYun-android",
+  "shippingId": "1601c7f0-2ef9-11e8-afe4-c7ccaf8d03fc",
+  "requiredWeight": 1
+}
+
+
+###
+
+POST https://apkqe4wywd.execute-api.us-east-1.amazonaws.com/dev/shippings
+content-type: application/json
+
+{
+  "shippingId": 109,
+  "orderId": 1,
+  "measuredWeight": 180,
+  "requiredQty": 4,
+  "measuredQty": 4,
+  "requiredWeight": 180
+}
+
+###
+
+https://apkqe4wywd.execute-api.us-east-1.amazonaws.com/dev/shippings/1601c7f0-2ef9-11e8-afe4-c7ccaf8d03fc
+
+###
+
+PUT https://apkqe4wywd.execute-api.us-east-1.amazonaws.com/dev/shippings/1601c7f0-2ef9-11e8-afe4-c7ccaf8d03fc
+
+{
+  "measuredWeight": 174,
+  "measuredQty": 1980
+}
+
+###
+
+POST https://apkqe4wywd.execute-api.us-east-1.amazonaws.com/dev/shippos
+
+{
+  "zip": "10007",
+  "orderId": "1",
+  "total": 1000,
+  "email": "mrhippo@goshippo.com",
+  "country": "US",
+  "name": "Mr Hippo",
+  "weight": 10,
+  "state": "NY",
+  "city": "New York",
+  "shippingId": "109",
+  "qty": 500,
+  "street1": "Broadway 1",
+  "phone": "+1 555 341 9393",
+  "fulfilled": "true"
+}

@@ -1,0 +1,132 @@
+service: smartscale-app-api2 # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: us-east-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+
+functions:
+
+  shippoCreate:
+    handler: shippo.create
+    events:
+      - http:
+          path: shippos
+          method: post
+          cors: true
+  shippoList:
+    handler: shippo.list
+    events:
+      - http:
+          path: shippos
+          method: get
+          cors: true
+
+  scaleCreate:
+    handler: scale.create
+    events:
+      - http:
+          path: scales
+          method: post
+          cors: true
+  scaleList:
+    handler: scale.list
+    events:
+      - http:
+          path: scales
+          method: get
+          cors: true
+  scaleGet:
+    handler: scale.get
+    events:
+      - http:
+          path: scales/{id}
+          method: get
+          cors: true
+
+  shippingCreate:
+    handler: shipping.create
+    events:
+      - http:
+          path: shippings
+          method: post
+          cors: true
+  shippingList:
+    handler: shipping.list
+    events:
+      - http:
+          path: shippings
+          method: get
+          cors: true
+  shippingGet:
+    handler: shipping.get
+    events:
+      - http:
+          path: shippings/{id}
+          method: get
+          cors: true
+  shippingUpdate:
+    handler: shipping.update
+    events:
+      - http:
+          path: shippings/{id}
+          method: put
+          cors: true
+
+resources:
+  Resources:
+    shippoTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}-shippo
+        AttributeDefinitions:
+          - AttributeName: shippingId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: shippingId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    scaleTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}-scale
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    orderTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}-shipping
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
