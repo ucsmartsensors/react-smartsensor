@@ -1,85 +1,46 @@
-import uuid from "uuid";
-import * as dynamoDbLib from "./libs/dynamodb-lib";
-import { success, failure } from "./libs/response-lib";
+const ENV = 'dev';
+const SCALE_TABLE = `serverless-${ENV}-scale`;
+const shipping = require('./shipping.js');
+const uuid = require('uuid');
+const AWS = require('aws-sdk');
+const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
-
-/*
-
-shippingId 
-measuered qty = measuredWeight/weight
- 
-Return PUT countData/measuredWeight
-
-
-
-
-{
-  shippingId
-  measuredQTY 
-  DateTime
-
-}
-
-*/
-
-
-
-export async function main(event, context, callback) {
+module.exports.create = (event, context, callback) => {
+  const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
+
   const params = {
-    TableName: "Orders",
+    TableName: SCALE_TABLE,
     Item: {
-      shippingId: data.shippingId,
-      orderId: data.orderId,
-      weight: data.weight,
-      qty: data.qty, 
-      total: data.total, 
-     createdAt: new Date().getTime(),
-    },
-
-
-    let lambda_handler = function(event, context) {
-      if (event.eventName === 'INSERT') {
-        let item = {
-          'TimeStamp': record.dynamodb.NewImage.shippingID.S
-        }
-        console.log('Item: ', item);
-      }
-    }    
-
-    
-};
-
-try {
-  await dynamoDbLib.call("put", params);
-
-  callback(null, success(params.Item));
-} catch (e) {
-  callback(null, failure({ status: false }));
-}
-}
-
-
-
-/*
-
-const params = {
-  TableName: "iot_dinner",
-  Item:{
-    TimeStamp: data.shippingID,
-    weight: data.weight_data.state.reported.Weight
+      id: uuid.v1(),
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      deviceID: data.Arduino_JSON.UUID,
+    //  shippingId: data.shippingId,
+    //  orderId: data.orderId,
+    //  weight_data: data.weight_data,
+      weightMeasurement: data.Arduino_JSON.weight
+    }
   }
-};
-*/
+  
+  dynamoDB.put(params, (error, result) => {
+    if (error) {
+      console.error(error);
+      callback(new Error("Couldn't create the scale item."));
+    }
 
+    shipping.incrementWeight(data.shippingId, data.Arduino_JSON.weight, (error, result) => {
+      if (error) {
+        console.error(error);
+        callback(new Error("Scale data recorded, but shipping item's weight not incremented."));
+        return;
+      }
+    });
 
-
-
-
-
-
-
-
-
-
-
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify(params)
+    };
+    callback(null, response);
+  })
+}

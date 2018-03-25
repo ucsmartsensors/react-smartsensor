@@ -1,8 +1,8 @@
 import uuid from "uuid";
 import * as dynamoDbLib from "./libs/dynamodb-lib";
 import { success, failure } from "./libs/response-lib";
-
-
+var AWS = require('aws-sdk') 
+var docClient = new AWS.DynamoDB.DocumentClient();
 /*
 
 shippingId 
@@ -10,23 +10,16 @@ measuered qty = measuredWeight/weight
  
 Return PUT countData/measuredWeight
 
-
-
-
-{
-  shippingId
-  measuredQTY 
-  DateTime
-
-}
-
 */
 
 
-
-export async function main(event, context, callback) {
-  const data = JSON.parse(event.body);
-  const params = {
+export const handler = (event, context, callback) => {
+  console.log('event', JSON.stringify(event, true));
+  console.log('context', JSON.stringify(context, true));
+  //var data = event; const data = JSON.parse(event.body);
+  var data = JSON.parse(event.body);
+  
+  const otherParams = {
     TableName: "Orders",
     Item: {
       shippingId: data.shippingId,
@@ -35,10 +28,205 @@ export async function main(event, context, callback) {
       qty: data.qty, 
       total: data.total, 
      createdAt: new Date().getTime(),
+    }
+  }
+  
+    // step 2
+    //query scale database, return most recent entry in the database
+    //grab the measured weight data from it
+    
+    
+console.log("Querying for items");
+
+/*
+{
+  "Arduino_JSON": {
+    "M": {
+      "UUID": {
+        "N": "11745"
+      },
+      "weight": {
+        "N": "98"
+      }
+    }
+  },
+  "device_id": {
+    "S": "awsYun"
+  },
+  "timestamp": {
+    "S": "1521938404743"
+  }
+}
+*/
+var params = {
+    TableName : "Iot_Rawdata",
+    KeyConditionExpression: "#id = :id",
+    ExpressionAttributeNames:{
+        "#id": "device_id"
     },
-   
+    ExpressionAttributeValues: {
+        ":id":"awsYun"
+    },
+    ScanIndexForward:false
 };
 
+docClient.query(params, function(err, data) {
+    if (err) {
+        console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+        callback("Query failed ... cannot go futher");
+    } else {
+      console.log(data.Items[0]);
+      //console.log(JSON.stringify(JSON.parse(data.Items[0])));
+        //console.log("Query succeeded. Got first as: " + JSON.stringify(JSON.parse(data.Items[0])));
+        confirmWeight(data.Items[0].Arduino_JSON);
+        //call out function for step3
+        /*data.Items.forEach(function(item) {
+            console.log(item.timestamp, item)
+        });*/
+
+    }
+});
+
+
+function confirmWeight(scaleData){
+  console.log("Calculating Scale Info",scaleData.weight);
+  var qty = data.qty;
+  var measuredWeight = scaleData.weight;
+  var itemWeight = data.weight;
+
+  var expectedWeight = qty*itemWeight;
+  var tolerance = 100;  //+ or - this eight
+  
+  //boolean
+  var isFulfilled = (Math.abs(expectedWeight-measuredWeight) <= tolerance);
+  console.log("Do weights match?  ", isFulfilled);
+  updateOrdersTable(isFulfilled, expectedWeight, measuredWeight); 
+}
+
+function updateOrdersTable(isFulfilled, expectedWeight, measuredWeight){
+
+// Update the item, unconditionally,
+console.log("Started to Send Update")
+var params = {
+  TableName:"Orders",
+  Key:{
+      "shippingId": data.shippingId,
+      "orderId":data.orderId,
+  },
+  UpdateExpression: "set isFulfilled = :f",
+  ExpressionAttributeValues:{
+      ":f":isFulfilled
+  },
+  ReturnValues:"UPDATED_NEW"
+};
+
+console.log("Updating the item...");
+docClient.update(params, function(err, data) {
+  if (err) {
+      console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+
+      var resp = {
+        statusCode: 500,
+        body:"UPDATE FAILED"
+      }
+
+      callback(resp);
+  } else {
+      console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+      
+      isEntireOrderFulfilled(expectedWeight,measuredWeight,isFulfilled);
+  }
+});
+
+function isEntireOrderFulfilled(expectedWeight, measuredWeight,isFulfilled){
+  var params = {
+    TableName : "Orders",
+    KeyConditionExpression: "#id = :id",
+    ExpressionAttributeNames:{
+        "#id": "orderId"
+    },
+    ExpressionAttributeValues: {
+        ":id":data.orderId
+    }
+};
+
+docClient.query(params, function(err, data) {
+    if (err) {
+        console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+        var resp = {
+          statusCode: 500,
+          body:"Query FAILED"
+        }
+  
+        callback(resp);
+    } else {
+
+      var body = {
+        expectedWeight, measuredWeight, isFulfilled
+      }
+
+        //call out function for step3
+        data.Items.forEach(function(item) {
+          if(item.isFulfilled != true){
+            body.entireShipmentFulfilled = false;
+            var resp = {
+              statusCode: 200,
+              body:JSON.stringify(body)
+            }
+            callback(null,resp)
+          }  
+        });
+        
+        body.entireShipmentFulfilled = true;
+        var resp = {
+          statusCode: 200,
+          body:JSON.stringify(body)
+        }
+        
+        callback(null,resp)
+
+    }
+});
+
+
+
+
+
+
+}
+
+}
+
+
+
+
+
+}   ;
+
+  //step 3 
+    //to get the data from the shippingID, weight, qty, 
+    //calculate total qty based of weight of individual item and measured weight
+    
+
+    //incrememnt this, and be able to weigh again if needed until the expected qty is matched
+    //and trigger a flag. If required qty has been fulfilled than fulfilled=true
+
+/*
+
+  const functionName = 'the-other-function; // this exists
+  const payload = { foo: 'bar' };
+
+  console.log('before invoke');
+  promiseInvoke({ functionName, payload })
+    .then(() => {
+      console.log('after invoke');
+      callback(null, null);
+    })
+    .catch(error => {
+      console.error(error);
+      callback(error);
+    });
+  console.log('handler exit');*/
 
 
 
@@ -54,62 +242,6 @@ const params = {
 };
 */
 
-let lambda_handler = function(event, context) {
-  if (event.eventName === 'INSERT') {
-    let item = {
-      'TimeStamp': record.dynamodb.NewImage.shippingID.S
-    }
-    console.log('Item: ', item);
-  }
-}
-
-def lambda_handler(event, context) 
-    for record in event['iot_dinner']:
-        if record['eventName'] == 'INSERT':
-            Item = {
-                'TimeStamp': record['dynamodb']['NewImage']['ShippingID']['S'],
-  
-            }
-            logger.info('Book: ' + json.dumps(book, indent=2))
 
 
 
-
-
-
-  try {
-    await dynamoDbLib.call("put", params);
-
-    callback(null, success(params.Item));
-  } catch (e) {
-    callback(null, failure({ status: false }));
-  }
-}
-
-
-
-var myLeftPromise = request.getItem(thisPullParams).promise().then(function(data) {return URL_BASE + data.Item.imageFile.S});
-
-// set a random number 0-9 for the slot position
-thisPullParams.Key.slotPosition.N = Math.floor(Math.random()*10).toString();
-// call DynamoDB to retrieve the image to use for the Middle slot result
-var myMiddlePromise = request.getItem(thisPullParams).promise().then(function(data) {return URL_BASE + data.Item.imageFile.S});
-
-// set a random number 0-9 for the slot position
-thisPullParams.Key.slotPosition.N = Math.floor(Math.random()*10).toString();
-// call DynamoDB to retrieve the image to use for the Right slot result
-var myRightPromise = request.getItem(thisPullParams).promise().then(function(data) {return URL_BASE + data.Item.imageFile.S});
-
-
-Promise.all([deviceData, postData]).then(function(values) {
-  // assign resolved promise values to returned JSON
-  slotResults.leftWheelImage.file.S = values[0];
-  slotResults.middleWheelImage.file.S = values[1];
-  slotResults.rightWheelImage.file.S = values[2];
-  // if all three values are identical, the spin is a winner
-  if ((values[0] === values[1]) && (values[0] === values[2])) {
-    slotResults.isWinner = true;            
-  }
-  // return the JSON result to the caller of the Lambda function
-  callback(null, slotResults);
-});
