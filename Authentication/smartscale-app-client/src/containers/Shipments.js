@@ -92,7 +92,7 @@ export default class Shipments extends Component {
 
 //API Calls
   validate() {
-    return invokeApig({ path: "/validate" });
+    return invokeApig({ path: "/status" });
   }
 
   saveShipment(body) {
@@ -190,11 +190,12 @@ export default class Shipments extends Component {
           <tbody>
             {this.state.response.map(response => {
               return(
-                <tr key={response.object_id}>
+
+                 <tr key={response.object_id}>
                 <td>{response.amount}</td>
                 <td>{response.provider}</td>
-                <td>{response.estimated_days}</td>
-                <td><button onClick={this.handleSelect.bind(this,response)}>Select</button></td>
+                <div className="duration"><td>{response.duration_terms}</td></div>
+                <td><button onClick={this.handleSelect.bind(this,response)}>Buy</button></td>
            
                 </tr>
               )
@@ -207,9 +208,12 @@ export default class Shipments extends Component {
 
   }
 
+  
 
   render() {
-    console.log(this.state.fulfilledOrders);
+    const { fulfilledOrders } = this.state;
+    const filteredOrders = fulfilledOrders && fulfilledOrders.filter( order => !!order.isFulfilled )
+    console.log('fulfilledOrders', fulfilledOrders, filteredOrders);
     const value=this.state.selectedOption && this.state.selectedOption.shippingId
     console.log(value)
     const data = this.state.selectedOption || {}
@@ -224,7 +228,7 @@ export default class Shipments extends Component {
               valueKey={"shippingId"}
               labelKey={"shippingId"}
               onChange={this.populateForm}
-              options={this.state.fulfilledOrders}/>
+              options={ filteredOrders   }/>
             
             </FormGroup>
             <FormGroup controlId="height">

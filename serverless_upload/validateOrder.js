@@ -7,13 +7,11 @@ AWS.config.update({ region: "us-east-2" });
 export async function main(event, context, callback) {
   const params = {
     TableName: "Orders",
-    IndexName: 'fulfilled-shippingId-index',
-
-   KeyConditionExpression: "fulfilled = :fulfilled",
   
- //  FilterExpression : 'attribute_exists(fulfilled)',
+  
+  FilterExpression : "isFulfilled = :isFulfilled",
   ExpressionAttributeValues: {
-  ":fulfilled": "true",
+  ":isFulfilled": "true",
 }
   
     
@@ -21,7 +19,7 @@ export async function main(event, context, callback) {
 
 
     try {
-      const result = await dynamoDbLib.call("query", params);
+      const result = await dynamoDbLib.call("scan", params);
       // Return the matching list of items in response body
       callback(null, success(result.Items));
     } catch(e) {

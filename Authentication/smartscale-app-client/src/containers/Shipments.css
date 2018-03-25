@@ -45,6 +45,10 @@
     border-radius: 2px;
     display: inline-block;
   }
+  
+th {
+  padding: 10px;
+}
 
   .Shipments h1 {
     font-family: "Open Sans", sans-serif;

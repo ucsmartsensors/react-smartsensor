@@ -66,7 +66,7 @@ export default class Status extends Component {
   
       
       {this.state.status.map((shipment)=> {  
-        if (shipment.fulfilled) {
+        if (shipment.Isfulfilled) {
     return <Table.Row key={shipment.shippingId} positive>
       <Table.Cell>{shipment.shippingId}</Table.Cell>
       <Table.Cell>{shipment.orderId}</Table.Cell>

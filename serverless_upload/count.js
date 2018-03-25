@@ -1,8 +1,8 @@
 import uuid from "uuid";
 import * as dynamoDbLib from "./libs/dynamodb-lib";
-import { success, failure } from "./libs/response-lib";
 var AWS = require('aws-sdk') 
 var docClient = new AWS.DynamoDB.DocumentClient();
+import { success, failure } from "./libs/response-lib";
 /*
 
 shippingId 
@@ -99,6 +99,7 @@ function confirmWeight(scaleData){
   
   //boolean
   var isFulfilled = (Math.abs(expectedWeight-measuredWeight) <= tolerance);
+
   console.log("Do weights match?  ", isFulfilled);
   updateOrdersTable(isFulfilled, expectedWeight, measuredWeight); 
 }
@@ -161,9 +162,14 @@ docClient.query(params, function(err, data) {
         callback(resp);
     } else {
 
+      
+
       var body = {
         expectedWeight, measuredWeight, isFulfilled
       }
+
+      
+     
 
         //call out function for step3
         data.Items.forEach(function(item) {
@@ -173,17 +179,20 @@ docClient.query(params, function(err, data) {
               statusCode: 200,
               body:JSON.stringify(body)
             }
-            callback(null,resp)
+            callback(null, success(body));
           }  
         });
-        
+
         body.entireShipmentFulfilled = true;
+    /*   
         var resp = {
           statusCode: 200,
           body:JSON.stringify(body)
         }
-        
-        callback(null,resp)
+*/
+                
+        callback(null, success(body));
+   //     callback(null,resp)
 
     }
 });

@@ -5,6 +5,68 @@ import "./Home.css";
 import { invokeApig } from '../libs/awsLib';
 import { PageHeader, ListGroup, ListGroupItem, FormControl } from "react-bootstrap";
 
+
+class ShipmentItem extends Component {
+  state = {
+    info : []
+  }
+
+  onHandleClick() {
+    //async onHandleClick(shipment) {
+      const { shipment } = this.props;
+      console.log(shipment)
+      invokeApig({
+        path: "/countData/",
+        method: "POST",
+        body: shipment
+      }).then( results => {
+
+        
+     console.log('RESULTS:', results);
+
+     this.setState({ info: results });
+
+      } ).catch( e => console.warn('Erro requesting API:', e) );
+    
+
+      //}  
+    
+    // pull the data from api
+    // and update the state with setState
+  }
+  render(){
+    const { shipment } = this.props;
+    const { info } = this.state;
+    console.log(shipment)
+    console.log('INFO:', info)
+
+    // use this.state.info somewhere in the ui
+
+    return (
+      <ListGroupItem bsStyle={info.isFulfilled ? "success" : "info" } onClick={e => this.onHandleClick() } 
+            shipment={shipment} 
+            key={shipment.shippingId}> 
+            
+            
+            ShippingId:{shipment.shippingId}, 
+            OrderId:{shipment.orderId},
+            weight:{shipment.weight}, 
+            measuredqty:{shipment.qty}
+            expectedWeight:{info.expectedWeight}
+
+                 
+             
+
+          {/* {"expectedWeight":150,"measuredWeight":0,"isFulfilled":false,"entireShipmentFulfilled":false} */}
+            
+          </ListGroupItem>
+    )
+  }
+}
+
+
+
+
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +76,7 @@ export default class Home extends Component {
       shipments: [],
       search: '',
       confirm: false,
+      response: []
       
 
     };
@@ -60,6 +123,8 @@ ShowHideTextComponentView = () =>{
 
     }
 
+    
+
     updateSearch = (event) =>{
       this.setState({search: event.target.value.substr(0, 20)
       
@@ -68,19 +133,15 @@ ShowHideTextComponentView = () =>{
       console.log(this.state.search)
     }
     
-    
 
-  async onHandleClick(shipment) {
-      console.log(shipment)
-      const results = invokeApig({
-        path: "/countData/",
-        method: "POST",
-        body: shipment
 
-      });
-      
-    }
   
+  
+      
+
+
+
+
     //this.sendCount(shipment.shippingId)
 
 
@@ -90,17 +151,7 @@ ShowHideTextComponentView = () =>{
     return (<div>
       <ListGroup>
         {this.state.shipments.map((shipment)=> {  
-          return <ListGroupItem onClick={() => this.onHandleClick(shipment)} 
-            shipment={shipment} 
-            key={shipment.shippingId}> 
-            ShippingId:{shipment.shippingId}, 
-            OrderId:{shipment.orderId},
-            weight:{shipment.weight},
-            measuredweight:
-            measuredqty:{shipment.qty},
-            expectedqty:
-
-            Total:{shipment.total}, </ListGroupItem>
+          return <ShipmentItem shipment={shipment} />
 
            
 
